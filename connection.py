@@ -10,8 +10,8 @@ def get_all_data(file):
         return all_data
 
 
-def get_all_headers(file):
-    with open(file, 'r') as f:
-        reader = csv.DictReader(f)
-        headers = reader.fieldnames
-        return headers
+# def get_all_headers(file):
+#     with open(file, 'r') as f:
+#         reader = csv.DictReader(f)
+#         headers = reader.fieldnames
+#         return headers
