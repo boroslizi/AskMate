@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask a Question</title>
+</head>
+<body>
+    <h1>New Question</h1>
+    <form action="{{ url_for('ask_question') }}" method="post">
+        <p><label for="question">Your question:</label><br>
+        <input id="question" name="question"></p>
+        <p><label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="40"></textarea></p>
+        <p>*uploading an image*</p>
+        <button type="submit">Submit my question</button>
+    </form>
+    <p><a href="/">Display details</a></p>
+</body>
+</html>
+
