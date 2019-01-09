@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session
+from flask import Flask, render_template, redirect, request
 import data_manager
 
 app = Flask(__name__)
@@ -12,13 +12,24 @@ def index():
     return render_template('index.html', questions=sorted_questions)
 
 
-@app.route('/ask-question', methods=['GET', 'POST'])
-def ask_question():
+@app.route('/add-question', methods=['GET', 'POST'])
+def add_question():
     if request.method == "GET":
-        return render_template('question.html')
+        return render_template('new_question.html')
     else:
-        pass
-    return render_template('question.html')
+        new_question_data = {
+            'id': data_manager.get_next_question_id(),
+            'submission_time': 1234567890,  # TODO: datetime?
+            'view_number': 0,
+            'vote_number': 0,
+            'title': request.form.get('question'),
+            'message': request.form.get('message'),
+            'image': request.form.get('image'),
+            }
+
+        data_manager.write_new_question(new_question_data)
+
+    return render_template('new_question.html')
 
 
 @app.route("/question/<question_id>/new-answer")
