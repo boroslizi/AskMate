@@ -20,7 +20,6 @@ def sort_by_id(questions):
         for question in questions:
             if time in question.values():
                 sorted_questions.append(question)
-    connection.get_next_id(QUESTIONS)
     return sorted_questions
 
 
@@ -28,8 +27,24 @@ def write_new_question(data):
     connection.write_to_file(QUESTIONS, data)
 
 
+def get_new_answer_id():
+    latest_answer_id = get_all_data("answers")[-1]["id"]
+    new_id = str(int(latest_answer_id) + 1)
+    return new_id
+
+
 def add_new_answer(new_answer, question_id):
     print(question_id, new_answer)
+    new_data = {
+        "id": get_new_answer_id(),
+        "submission_time": random.randint(1, 10000000),
+        "vote_number": "0",
+        "question_id": question_id,
+        "message": new_answer,
+        "image": ""
+    }
+    connection.write_to_file(ANSWERS, new_data)
+
     pass
 
 
