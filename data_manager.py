@@ -21,3 +21,8 @@ def sort_by_id(questions):
             if time in question.values():
                 sorted_questions.append(question)
     return sorted_questions
+
+
+def add_new_answer(new_answer, question_id):
+    print(question_id, new_answer)
+    pass
