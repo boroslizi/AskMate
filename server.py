@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+import time
 import data_manager
 
 app = Flask(__name__)
@@ -19,7 +20,7 @@ def add_question():
     else:
         new_question_data = {
             'id': data_manager.get_next_question_id(),
-            'submission_time': 1234567890,  # TODO: datetime?
+            'submission_time': int(time.time()),
             'view_number': 0,
             'vote_number': 0,
             'title': request.form.get('question'),
@@ -29,7 +30,7 @@ def add_question():
 
         data_manager.write_new_question(new_question_data)
 
-    return render_template('new_question.html')
+    return redirect('/')  # TODO: that question's display page
 
 
 @app.route("/question/<question_id>/new-answer")
