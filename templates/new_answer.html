@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Adding a new answer</h1>
-    <form action="{{ url_for("add_new_answer", question_id="0") }}" method="post">
+    <form action="{{ url_for("add_new_answer", question_id=question_id) }}" method="post">
         <label for="new_answer">Type your answer in the textarea below and submit it with the "Add new answer" button!</label>
         <br>
         <textarea id="new_answer" name="new_answer" minlength="10" required></textarea>

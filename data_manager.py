@@ -2,7 +2,6 @@ import os
 import time
 import connection
 
-
 QUESTIONS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 ANSWERS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 
@@ -36,9 +35,8 @@ def get_new_answer_id():
 
 
 def add_new_answer(new_answer, question_id):
-    print(question_id, new_answer)
     new_data = {
-        "id": get_new_answer_id(),
+        "id": question_id,
         "submission_time": int(time.time()),
         "vote_number": "0",
         "question_id": question_id,

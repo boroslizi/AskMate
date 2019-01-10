@@ -33,5 +33,7 @@
         </tr>
         {% endfor %}
     </table>
+<br>
+<a href="{{ url_for("route_add_new_answer", question_id=question['id']) }}">Add new answer</a>
 </body>
 </html>

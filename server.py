@@ -41,14 +41,14 @@ def add_question():
 
 @app.route("/question/<question_id>/new-answer")
 def route_add_new_answer(question_id):
-    return render_template("new_answer.html")
+    return render_template("new_answer.html", question_id=question_id)
 
 
 @app.route("/question/<question_id>/new-answer", methods=["POST"])
 def add_new_answer(question_id):
     new_answer = request.form["new_answer"]
     data_manager.add_new_answer(new_answer, question_id)
-    return redirect("/")
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 if __name__ == "__main__":
