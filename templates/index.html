@@ -9,7 +9,7 @@
     <table>
         {% for question in questions %}
         <tr>
-            <td>{{ question['title'] }}</td>
+            <td><a href="{{ url_for('display_question', question_id=question['id']) }}">{{ question['title'] }}</a></td>
         </tr>
         {% endfor %}
     </table>

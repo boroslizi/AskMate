@@ -11,6 +11,15 @@ def index():
     sorted_questions = data_manager.sort_by_id(questions)
     return render_template('index.html', questions=sorted_questions)
 
+@app.route('/question/<question_id>')
+def display_question(question_id):
+
+    question = data_manager.get_all_data_by_question_id(question_id)
+    answers = data_manager.get_answers_by_question_id(question_id)
+    return render_template('display_question.html', question=question, answers=answers)
+
+
+
 
 @app.route('/add-question', methods=['GET', 'POST'])
 def add_question():

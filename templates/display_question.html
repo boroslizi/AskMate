@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display question</title>
+</head>
+<body>
+<h1>Question</h1>
+<h3>{{ question['title'] }}</h3>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Submission time</th>
+            <th>View number</th>
+            <th>Vote number</th>
+            <th>Message</th>
+            <th>Image</th>
+        </tr>
+        <tr>
+            <td>{{ question['id'] }}</td>
+            <td>{{ question['submission_time'] }}</td>
+            <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}</td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['image'] }}</td>
+        </tr>
+    </table>
+<h3>Answers</h3>
+    <table>
+        {% for answer in answers %}
+        <tr>
+            <td>{{ answer }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
