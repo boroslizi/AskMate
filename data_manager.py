@@ -1,5 +1,7 @@
 import os
+import time
 import connection
+
 
 QUESTIONS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 ANSWERS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
@@ -37,7 +39,7 @@ def add_new_answer(new_answer, question_id):
     print(question_id, new_answer)
     new_data = {
         "id": get_new_answer_id(),
-        "submission_time": random.randint(1, 10000000),
+        "submission_time": int(time.time()),
         "vote_number": "0",
         "question_id": question_id,
         "message": new_answer,
@@ -45,25 +47,24 @@ def add_new_answer(new_answer, question_id):
     }
     connection.write_to_file(ANSWERS, new_data)
 
-    pass
-
 
 def get_next_question_id():
     return connection.get_next_id(QUESTIONS)
+
 
 def get_all_data_by_question_id(question_id):
     questions_list = connection.get_all_data(QUESTIONS)
     question_by_id = []
     for question in questions_list:
-        if (question_id == question['id']):
+        if question_id == question['id']:
             question_by_id = question
     return question_by_id
+
 
 def get_answers_by_question_id(question_id):
     answers_list = connection.get_all_data(ANSWERS)
     answers_list_by_id = []
     for answers in answers_list:
-        if (answers['question_id'] == question_id):
+        if answers['question_id'] == question_id:
             answers_list_by_id.append(answers['message'])
     return answers_list_by_id
-

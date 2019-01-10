@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 import time
 import data_manager
 
@@ -12,14 +12,12 @@ def index():
     sorted_questions = data_manager.sort_by_id(questions)
     return render_template('index.html', questions=sorted_questions)
 
+
 @app.route('/question/<question_id>')
 def display_question(question_id):
-
     question = data_manager.get_all_data_by_question_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     return render_template('display_question.html', question=question, answers=answers)
-
-
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -38,8 +36,7 @@ def add_question():
             }
 
         data_manager.write_new_question(new_question_data)
-
-    return redirect('/')  # TODO: that question's display page
+    return redirect(url_for('display_question', question_id=new_question_data['id']))
 
 
 @app.route("/question/<question_id>/new-answer")
