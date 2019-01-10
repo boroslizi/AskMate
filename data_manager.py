@@ -6,11 +6,12 @@ QUESTIONS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else '
 ANSWERS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 
 
-def get_all_data(file):
-    if file == "questions":
-        return connection.get_all_data(QUESTIONS)
-    elif file == "answers":
-        return connection.get_all_data(ANSWERS)
+def get_all_answers():
+    return connection.get_all_data(ANSWERS)
+
+
+def get_all_questions():
+    return connection.get_all_data(QUESTIONS)
 
 
 def sort_by_id(questions):
@@ -28,15 +29,21 @@ def write_new_question(data):
     connection.write_to_file(QUESTIONS, data)
 
 
-def get_new_answer_id():
-    latest_answer_id = get_all_data("answers")[-1]["id"]
+def get_next_answer_id():
+    latest_answer_id = get_all_answers()[-1]["id"]
     new_id = str(int(latest_answer_id) + 1)
+    return new_id
+
+
+def get_next_question_id():
+    latest_question_id = get_all_questions()[-1]["id"]
+    new_id = str(int(latest_question_id) + 1)
     return new_id
 
 
 def add_new_answer(new_answer, question_id):
     new_data = {
-        "id": question_id,
+        "id": get_next_answer_id(),
         "submission_time": int(time.time()),
         "vote_number": "0",
         "question_id": question_id,
@@ -44,10 +51,6 @@ def add_new_answer(new_answer, question_id):
         "image": ""
     }
     connection.write_to_file(ANSWERS, new_data)
-
-
-def get_next_question_id():
-    return connection.get_next_id(QUESTIONS)
 
 
 def get_all_data_by_question_id(question_id, source):

@@ -21,16 +21,6 @@ def get_all_headers(file):
         return headers
 
 
-def get_next_id(file):
-    with open(file, 'r') as f:
-        reader = csv.DictReader(f)
-        for data_block in reader:
-            data_id = int(data_block['id'])
-        data_id += 1
-        print("New id is: {}".format(data_id))
-        return data_id
-
-
 def write_to_file(file, data):
     headers = get_all_headers(file)
     with open(file, 'a') as f:
