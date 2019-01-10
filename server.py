@@ -15,8 +15,9 @@ def index():
 
 @app.route('/question/<question_id>')
 def display_question(question_id):
-    question = data_manager.get_all_data_by_question_id(question_id)
-    answers = data_manager.get_answers_by_question_id(question_id)
+
+    question = data_manager.get_all_data_by_question_id(question_id, "questions")
+    answers = data_manager.get_all_data_by_question_id(question_id, "answers")
     return render_template('display_question.html', question=question, answers=answers)
 
 

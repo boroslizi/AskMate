@@ -50,19 +50,16 @@ def get_next_question_id():
     return connection.get_next_id(QUESTIONS)
 
 
-def get_all_data_by_question_id(question_id):
-    questions_list = connection.get_all_data(QUESTIONS)
-    question_by_id = []
-    for question in questions_list:
-        if question_id == question['id']:
-            question_by_id = question
-    return question_by_id
-
-
-def get_answers_by_question_id(question_id):
-    answers_list = connection.get_all_data(ANSWERS)
-    answers_list_by_id = []
-    for answers in answers_list:
-        if answers['question_id'] == question_id:
-            answers_list_by_id.append(answers['message'])
-    return answers_list_by_id
+def get_all_data_by_question_id(question_id, source):
+    details = []
+    if source == "questions":
+        file = connection.get_all_data(QUESTIONS)
+        for question in file:
+            if question_id == question['id']:
+                details = question
+    else:
+        file = connection.get_all_data(ANSWERS)
+        for answer in file:
+            if question_id == answer['question_id']:
+                details.append(answer)
+    return details
