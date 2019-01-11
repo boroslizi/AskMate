@@ -21,23 +21,28 @@ def display_question(question_id):
     return render_template('display_question.html', question=question, answers=answers)
 
 
+@app.route('/questions/<question_id>/vote-up', methods=['POST'])
+def vote_up(question_id):
+
+    data_manager.vote_for_questions("up", question_id)
+
+    return redirect(url_for('display_question'))
+
+
 @app.route('/add-question', methods=['GET', 'POST'])
 def add_question():
     if request.method == "GET":
         return render_template('new_question.html')
-    else:
-        new_question_data = {
-            'id': data_manager.get_next_question_id(),
-            'submission_time': int(time.time()),
-            'view_number': 0,
-            'vote_number': 0,
+    new_question_all_data = data_manager.add_new_question()
+    new_question_all_data.update(
+        {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
-            'image': request.form.get('image'),
-            }
-
-        data_manager.write_new_question(new_question_data)
-    return redirect(url_for('display_question', question_id=new_question_data['id']))
+            'image': request.form.get('image')
+        }
+    )
+    data_manager.write_new_question(new_question_all_data)
+    return redirect(url_for('display_question', question_id=new_question_all_data['id']))
 
 
 @app.route("/question/<question_id>/new-answer")

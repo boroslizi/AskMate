@@ -30,15 +30,31 @@ def write_new_question(data):
 
 
 def get_next_answer_id():
+    if len(get_all_answers()) == 0:
+        return 0
     latest_answer_id = get_all_answers()[-1]["id"]
     new_id = str(int(latest_answer_id) + 1)
     return new_id
 
 
 def get_next_question_id():
+    if len(get_all_questions()) == 0:
+        return 0
     latest_question_id = get_all_questions()[-1]["id"]
     new_id = str(int(latest_question_id) + 1)
     return new_id
+
+
+def add_new_question():
+    new_question_data = {
+        'id': get_next_question_id(),
+        'submission_time': int(time.time()),
+        'view_number': 0,
+        'vote_number': 0
+        }
+    return new_question_data
+
+
 
 
 def add_new_answer(new_answer, question_id):
@@ -60,9 +76,20 @@ def get_all_data_by_question_id(question_id, source):
         for question in file:
             if question_id == question['id']:
                 details = question
+                details['vote_number'] = int(details['vote_number'])
     else:
         file = connection.get_all_data(ANSWERS)
         for answer in file:
             if question_id == answer['question_id']:
                 details.append(answer)
     return details
+
+
+def vote_for_questions(vote, question_id):
+    question_to_vote = get_all_data_by_question_id(question_id, "questions")
+    if vote == "up":
+        question_to_vote['vote_number'] += 1
+    else:
+        question_to_vote['vote_number'] -= 1
+    connection.write_to_file(QUESTIONS, connection.get_all_data(QUESTIONS))
+
