@@ -30,15 +30,31 @@ def write_new_question(data):
 
 
 def get_next_answer_id():
+    if len(get_all_answers()) == 0:
+        return 0
     latest_answer_id = get_all_answers()[-1]["id"]
     new_id = str(int(latest_answer_id) + 1)
     return new_id
 
 
 def get_next_question_id():
+    if len(get_all_questions()) == 0:
+        return 0
     latest_question_id = get_all_questions()[-1]["id"]
     new_id = str(int(latest_question_id) + 1)
     return new_id
+
+
+def add_new_question():
+    new_question_data = {
+        'id': get_next_question_id(),
+        'submission_time': int(time.time()),
+        'view_number': 0,
+        'vote_number': 0
+        }
+    return new_question_data
+
+
 
 
 def add_new_answer(new_answer, question_id):
