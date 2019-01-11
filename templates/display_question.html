@@ -7,6 +7,9 @@
 <body>
 <h1>Question</h1>
 <h3>{{ question['title'] }}</h3>
+<form action="{{ url_for("vote_up", question_id=question['id']) }}" method="post">
+    <button type="submit">Vote up</button>
+</form>
     <table>
         <tr>
             <th>Id</th>
@@ -35,5 +38,7 @@
     </table>
 <br>
 <a href="{{ url_for("route_add_new_answer", question_id=question['id']) }}">Add new answer</a>
+<br>
+<a href="{{ url_for("index") }}">Home page</a>
 </body>
 </html>
