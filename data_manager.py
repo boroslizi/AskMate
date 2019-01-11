@@ -57,9 +57,20 @@ def get_all_data_by_question_id(question_id, source):
         for question in file:
             if question_id == question['id']:
                 details = question
+                details['vote_number'] = int(details['vote_number'])
     else:
         file = connection.get_all_data(ANSWERS)
         for answer in file:
             if question_id == answer['question_id']:
                 details.append(answer)
     return details
+
+
+def vote_for_questions(vote, question_id):
+    question_to_vote = get_all_data_by_question_id(question_id, "questions")
+    if vote == "up":
+        question_to_vote['vote_number'] += 1
+    else:
+        question_to_vote['vote_number'] -= 1
+    connection.write_to_file(QUESTIONS, connection.get_all_data(QUESTIONS))
+

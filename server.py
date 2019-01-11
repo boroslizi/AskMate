@@ -21,6 +21,14 @@ def display_question(question_id):
     return render_template('display_question.html', question=question, answers=answers)
 
 
+@app.route('/questions/<question_id>/vote-up', methods=['POST'])
+def vote_up(question_id):
+
+    data_manager.vote_for_questions("up", question_id)
+
+    return redirect(url_for('display_question'))
+
+
 @app.route('/add-question', methods=['GET', 'POST'])
 def add_question():
     if request.method == "GET":
