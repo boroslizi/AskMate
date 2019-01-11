@@ -26,3 +26,4 @@ def write_to_file(file, data):
     with open(file, 'a') as f:
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writerow(data)
+

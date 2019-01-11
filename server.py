@@ -15,7 +15,6 @@ def index():
 
 @app.route('/question/<question_id>')
 def display_question(question_id):
-
     question = data_manager.get_all_data_by_question_id(question_id, "questions")
     answers = data_manager.get_all_data_by_question_id(question_id, "answers")
     return render_template('display_question.html', question=question, answers=answers)
@@ -23,9 +22,7 @@ def display_question(question_id):
 
 @app.route('/questions/<question_id>/vote-up', methods=['POST'])
 def vote_up(question_id):
-
     data_manager.vote_for_questions("up", question_id)
-
     return redirect(url_for('display_question'))
 
 
@@ -33,6 +30,7 @@ def vote_up(question_id):
 def add_question():
     if request.method == "GET":
         return render_template('new_question.html')
+
     new_question_all_data = data_manager.add_new_question()
     new_question_all_data.update(
         {

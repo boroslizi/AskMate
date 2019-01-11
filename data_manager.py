@@ -18,9 +18,9 @@ def sort_by_id(questions):
     submission_times = [question['submission_time'] for question in questions]
     submission_times.sort(reverse=True)
     sorted_questions = []
-    for time in submission_times:
+    for submission_time in submission_times:
         for question in questions:
-            if time in question.values():
+            if submission_time in question.values():
                 sorted_questions.append(question)
     return sorted_questions
 
@@ -53,8 +53,6 @@ def add_new_question():
         'vote_number': 0
         }
     return new_question_data
-
-
 
 
 def add_new_answer(new_answer, question_id):
@@ -92,4 +90,3 @@ def vote_for_questions(vote, question_id):
     else:
         question_to_vote['vote_number'] -= 1
     connection.write_to_file(QUESTIONS, connection.get_all_data(QUESTIONS))
-
