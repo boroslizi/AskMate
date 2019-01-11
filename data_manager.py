@@ -18,9 +18,9 @@ def sort_by_id(questions):
     submission_times = [question['submission_time'] for question in questions]
     submission_times.sort(reverse=True)
     sorted_questions = []
-    for submission_time in submission_times:
+    for time in submission_times:
         for question in questions:
-            if submission_time in question.values():
+            if time in question.values():
                 sorted_questions.append(question)
     return sorted_questions
 
