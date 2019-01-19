@@ -55,6 +55,22 @@ def add_new_question():
     return new_question_data
 
 
+def edit_question(question_id):
+    question_data = get_all_data_by_question_id(question_id, "questions")
+    edited_question_data = {
+        'id': question_id,
+        'submission_time': int(time.time()),
+        'view_number': int(question_data['view_number']),
+        'vote_number': int(question_data['vote_number'])
+        }
+    return edited_question_data
+
+
+def get_edited_question_to_write(edited_question):
+    question_id = edited_question['id']
+    connection.edit_file(QUESTIONS, edited_question, question_id)
+
+
 def add_new_answer(new_answer, question_id):
     new_data = {
         "id": get_next_answer_id(),
@@ -90,3 +106,11 @@ def vote_for_questions(vote, question_id):
     else:
         question_to_vote['vote_number'] -= 1
     connection.write_to_file(QUESTIONS, connection.get_all_data(QUESTIONS))
+
+
+def delete_question_by_id(question_id):
+    connection.delete_from_file(QUESTIONS, question_id)
+
+
+def delete_answer_by_id(answer_id):
+    connection.delete_from_file(ANSWERS, answer_id)

@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Display question</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Display question{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+          integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/'
+          crossorigin='anonymous'>
+{% endblock %}
+{% block body %}
 <h1>Question</h1>
 <h3>{{ question['title'] }}</h3>
 <form action="{{ url_for("vote_up", question_id=question['id']) }}" method="post">
@@ -30,9 +32,14 @@
     </table>
 <h3>Answers</h3>
     <table>
+        <tr>
+            <th>Answer</th>
+            <th>Delete</th>
+        </tr>
         {% for answer in answers %}
         <tr>
             <td>{{ answer['message'] }}</td>
+            <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
         </tr>
         {% endfor %}
     </table>
@@ -40,5 +47,4 @@
 <a href="{{ url_for("route_add_new_answer", question_id=question['id']) }}">Add new answer</a>
 <br>
 <a href="{{ url_for("index") }}">Home page</a>
-</body>
-</html>
+{% endblock %}

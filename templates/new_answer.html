@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Adding a new answer</title>
-</head>
-<body>
-    <h1>Adding a new answer</h1>
-    <form action="{{ url_for("add_new_answer", question_id=question_id) }}" method="post">
-        <label for="new_answer">Type your answer in the textarea below and submit it with the "Add new answer" button!</label>
-        <br>
-        <textarea id="new_answer" name="new_answer" minlength="10" required></textarea>
-        <br>
-        <button type="submit">Add a new answer</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Adding a new answer{% endblock %}
+{% block body %}
+<h1>Adding a new answer</h1>
+<form action="{{ url_for("add_new_answer", question_id=question_id) }}" method="post">
+    <label for="new_answer">Type your answer in the textarea below and submit it with the "Add new answer" button!</label>
+    <br>
+    <textarea id="new_answer" name="new_answer" minlength="10" required></textarea>
+    <br>
+    <button type="submit">Add a new answer</button>
+</form>
+{% endblock %}

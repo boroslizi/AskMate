@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ask a Question</title>
-</head>
-<body>
-    <h1>New Question</h1>
-    <form action="{{ url_for('add_question') }}" method="post">
-        <p><label for="question">Your question:</label><br>
-        <input id="question" name="question"></p>
-        <p><label for="message">Message:</label><br>
-        <textarea id="message" name="message" rows="4" cols="40"></textarea></p>
-        <p><label for="image">Image URL:</label><br>
-        <input id="image" name="image"></p>
-        <button type="submit">Submit my question</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Ask a Question{% endblock %}
+{% block body %}
+<h1>New Question</h1>
+<form action="{{ url_for('add_question') }}" method="post">
+    <p><label for="question">Your question:</label><br>
+    <input id="question" name="question"></p>
+    <p><label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="4" cols="40"></textarea></p>
+    <p><label for="image">Image URL:</label><br>
+    <input id="image" name="image"></p>
+    <button type="submit">Submit my question</button>
+</form>
+{% endblock %}

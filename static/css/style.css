@@ -1,0 +1,16 @@
+body {
+    padding: 10px;
+}
+
+table {
+    padding: 10px;
+    line-height: 2;
+}
+
+th, td {
+    border-bottom: 1px solid lightgray;
+}
+
+#bin {
+    text-align: center;
+}

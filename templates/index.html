@@ -1,21 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AskMate</title>
-</head>
-<body>
-    <h1>Questions</h1>
-    <table>
-        {% for question in questions %}
-        <tr>
-            <td><a href="{{ url_for('display_question', question_id=question['id']) }}">{{ question['title'] }}</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-    <p></p>
-    <form action="{{ url_for('add_question') }}">
-        <input type="submit" value="Ask a Question">
-    </form>
-</body>
-</html>
+{%  extends "base.html" %}
+{% block title %}Welcome!{%  endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+          integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/'
+          crossorigin='anonymous'>
+{% endblock %}
+{% block body %}
+<h1>Questions</h1>
+<table>
+    <tr>
+        <th>Question</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    {% for question in questions %}
+    <tr>
+        <td><a href="{{ url_for('display_question', question_id=question['id']) }}">{{ question['title'] }}</a></td>
+        <td><a href="{{ url_for('edit_question', question_id=question['id']) }}">Modify</a></td>
+        <td id="bin"><a href="{{ url_for('delete_question', question_id=question['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
+    </tr>
+    {% endfor %}
+</table>
+<p></p>
+<form action="{{ url_for('add_question') }}">
+    <input type="submit" value="Ask a Question">
+</form>
+{% endblock %}
