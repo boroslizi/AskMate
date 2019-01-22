@@ -15,7 +15,6 @@ def index():
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
-    print(answers)
     return render_template('display_question.html', question=question, answers=answers)
 
 

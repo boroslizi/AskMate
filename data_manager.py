@@ -79,8 +79,8 @@ def get_question_by_id(cursor, question_id):
     cursor.execute("""SELECT * FROM question
                       WHERE id=%(id)s;""",
                    {'id': int(question_id)})
-    question_data = cursor.fetchall()
-    return question_data[0]
+    question_data = cursor.fetchall()[0]
+    return question_data
 
 
 @database_connect.connection_handler
@@ -106,19 +106,23 @@ def edit_question(cursor, question_id, edited_data):
                     })
 
 
-def get_next_answer_id():
-    if len(get_all_answers()) == 0:
-        return 0
-    latest_answer_id = get_all_answers()[-1]["id"]
-    new_id = str(int(latest_answer_id) + 1)
+@database_connect.connection_handler
+def get_next_question_id(cursor):
+    try:
+        cursor.execute("""SELECT MAX(id) from question;""")
+        new_id = cursor.fetchall()[0]['max'] + 1
+    except KeyError:
+        new_id = 0
     return new_id
 
 
-def get_next_question_id():
-    if len(get_all_questions()) == 0:
-        return 0
-    latest_question_id = get_all_questions()[-1]["id"]
-    new_id = str(int(latest_question_id) + 1)
+@database_connect.connection_handler
+def get_next_answer_id(cursor):
+    try:
+        cursor.execute("""SELECT MAX(id) from answer;""")
+        new_id = cursor.fetchall()[0]['max'] + 1
+    except KeyError:
+        new_id = 0
     return new_id
 
 
