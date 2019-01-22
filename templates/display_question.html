@@ -30,6 +30,7 @@
             <td>{{ question['image'] }}</td>
         </tr>
     </table>
+{% if (answers is defined) and answers %}
 <h3>Answers</h3>
     <table>
         <tr>
@@ -43,6 +44,7 @@
         </tr>
         {% endfor %}
     </table>
+{% endif %}
 <br>
 <a href="{{ url_for("route_add_new_answer", question_id=question['id']) }}">Add new answer</a>
 <br>

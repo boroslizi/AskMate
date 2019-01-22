@@ -15,6 +15,7 @@ def index():
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
+    print(answers)
     return render_template('display_question.html', question=question, answers=answers)
 
 
@@ -44,18 +45,15 @@ def add_question():
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
     if request.method == "GET":
-        question = data_manager.get_all_data_by_question_id(question_id, "questions")
+        question = data_manager.get_question_by_id(question_id)
         return render_template('edit_question.html', question=question)
 
-    edited_question_data = data_manager.edit_question(question_id)
-    edited_question_data.update(
-        {
+    edited_question_data = {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
             'image': request.form.get('image')
-        }
-    )
-    data_manager.get_edited_question_to_write(edited_question_data)
+            }
+    data_manager.edit_question(question_id, edited_question_data)
     return redirect(url_for('display_question', question_id=question_id))
 
 
