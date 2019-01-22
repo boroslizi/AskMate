@@ -1,10 +1,5 @@
-import os
 from datetime import datetime
-import connection
 import database_connect
-
-QUESTIONS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
-ANSWERS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 
 
 @database_connect.connection_handler
@@ -44,9 +39,9 @@ def write_to_questions(cursor, data):
     qry = "INSERT INTO question VALUES (%s)" % (placeholders)
     cursor.execute(qry, data.values())
 
+
 @database_connect.connection_handler
 def write_to_questions(cursor, data):
-    headers = get_all_question_headers()
     cursor.execute("""INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, %(vote_number_value)s, %(title_value)s,
                     %(message_value)s, %(image_value)s);
                     """,
@@ -66,10 +61,6 @@ def sort_questions_by_time(cursor):
                       ORDER BY submission_time DESC;""")
     sorted_questions = cursor.fetchall()
     return sorted_questions
-
-
-def write_new_question(data):
-    write_to_questions(data)
 
 
 def get_next_answer_id():
@@ -126,20 +117,22 @@ def add_new_answer(new_answer, question_id):
     connection.write_to_file(ANSWERS, new_data)
 
 
-def get_all_data_by_question_id(question_id, source):
-    details = []
-    if source == "questions":
-        file = connection.get_all_data(QUESTIONS)
-        for question in file:
-            if question_id == question['id']:
-                details = question
-                details['vote_number'] = int(details['vote_number'])
-    else:
-        file = connection.get_all_data(ANSWERS)
-        for answer in file:
-            if question_id == answer['question_id']:
-                details.append(answer)
-    return details
+@database_connect.connection_handler
+def get_question_by_id(cursor, question_id):
+    cursor.execute("""SELECT * FROM question
+                      WHERE id=%(id)s;""",
+                   {'id': question_id})
+    question_data = cursor.fetchall()
+    return question_data
+
+
+@database_connect.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute("""SELECT * FROM answer
+                      WHERE question_id=%(id)s;""",
+                   {'id': question_id})
+    answers = cursor.fetchall()
+    return answers
 
 
 def vote_for_questions(vote, question_id):

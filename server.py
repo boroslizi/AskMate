@@ -8,15 +8,13 @@ app = Flask(__name__)
 @app.route('/list')
 def index():
     sorted_questions = data_manager.sort_questions_by_time()
-    print(data_manager.get_all_question_headers())
-    print(data_manager.get_next_answer_id())
     return render_template('index.html', questions=sorted_questions)
 
 
 @app.route('/question/<question_id>')
 def display_question(question_id):
-    question = data_manager.get_all_data_by_question_id(question_id, "questions")
-    answers = data_manager.get_all_data_by_question_id(question_id, "answers")
+    question = data_manager.get_question_by_id(question_id)
+    answers = data_manager.get_answers_by_question_id(question_id)
     return render_template('display_question.html', question=question, answers=answers)
 
 
@@ -39,7 +37,7 @@ def add_question():
             'image': request.form.get('image')
         }
     )
-    data_manager.write_new_question(new_question_all_data)
+    data_manager.write_to_questions(new_question_all_data)
     return redirect(url_for('display_question', question_id=new_question_all_data['id']))
 
 
