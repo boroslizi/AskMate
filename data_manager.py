@@ -1,32 +1,75 @@
 import os
-import time
+from datetime import datetime
 import connection
+import database_connect
 
 QUESTIONS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/question.csv'
 ANSWERS = os.getenv('DATA_FILE_PATH') if 'DATA_FILE_PATH' in os.environ else 'sample_data/answer.csv'
 
 
-def get_all_answers():
-    return connection.get_all_data(ANSWERS)
+@database_connect.connection_handler
+def get_all_answers(cursor):
+    cursor.execute("""SELECT * FROM answer;""")
+    answers = cursor.fetchall()
+    return answers
 
 
-def get_all_questions():
-    return connection.get_all_data(QUESTIONS)
+@database_connect.connection_handler
+def get_all_questions(cursor):
+    cursor.execute("""SELECT * FROM question;""")
+    questions = cursor.fetchall()
+    return questions
 
 
-def sort_by_id(questions):
-    submission_times = [question['submission_time'] for question in questions]
-    submission_times.sort(reverse=True)
-    sorted_questions = []
-    for submission_time in submission_times:
-        for question in questions:
-            if submission_time in question.values():
-                sorted_questions.append(question)
+@database_connect.connection_handler
+def get_all_question_headers(cursor):
+    cursor.execute("""SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                      WHERE TABLE_NAME = 'question';""")
+    table_headers = cursor.fetchall()
+    print(type(table_headers))
+    return table_headers
+
+
+@database_connect.connection_handler
+def get_all_answer_headers(cursor):
+    cursor.execute("""SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                      WHERE TABLE_NAME = 'answer';""")
+    table_headers = cursor.fetchall()
+    return table_headers
+
+
+@database_connect.connection_handler
+def write_to_questions(cursor, data):
+    placeholders = ', '.join(['%s'] * len(data))
+    qry = "INSERT INTO question VALUES (%s)" % (placeholders)
+    cursor.execute(qry, data.values())
+
+@database_connect.connection_handler
+def write_to_questions(cursor, data):
+    headers = get_all_question_headers()
+    cursor.execute("""INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, %(vote_number_value)s, %(title_value)s,
+                    %(message_value)s, %(image_value)s);
+                    """,
+                   {'id_value': data['id'],
+                    'submission_time_value': data['submission_time'],
+                    'view_number_value': data['view_number'],
+                    'vote_number_value': data['vote_number'],
+                    'title_value': data['title'],
+                    'message_value': data['message'],
+                    'image_value': data['image']}
+                   )
+
+
+@database_connect.connection_handler
+def sort_questions_by_time(cursor):
+    cursor.execute("""SELECT title FROM question
+                      ORDER BY submission_time DESC;""")
+    sorted_questions = cursor.fetchall()
     return sorted_questions
 
 
 def write_new_question(data):
-    connection.write_to_file(QUESTIONS, data)
+    write_to_questions(data)
 
 
 def get_next_answer_id():
@@ -48,7 +91,7 @@ def get_next_question_id():
 def add_new_question():
     new_question_data = {
         'id': get_next_question_id(),
-        'submission_time': int(time.time()),
+        'submission_time': datetime.now(),
         'view_number': 0,
         'vote_number': 0
         }
@@ -59,7 +102,7 @@ def edit_question(question_id):
     question_data = get_all_data_by_question_id(question_id, "questions")
     edited_question_data = {
         'id': question_id,
-        'submission_time': int(time.time()),
+        'submission_time': datetime-now(),
         'view_number': int(question_data['view_number']),
         'vote_number': int(question_data['vote_number'])
         }
@@ -74,7 +117,7 @@ def get_edited_question_to_write(edited_question):
 def add_new_answer(new_answer, question_id):
     new_data = {
         "id": get_next_answer_id(),
-        "submission_time": int(time.time()),
+        "submission_time": datetime.now(),
         "vote_number": "0",
         "question_id": question_id,
         "message": new_answer,

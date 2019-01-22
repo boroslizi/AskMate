@@ -7,8 +7,9 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def index():
-    questions = data_manager.get_all_questions()
-    sorted_questions = data_manager.sort_by_id(questions)
+    sorted_questions = data_manager.sort_questions_by_time()
+    print(data_manager.get_all_question_headers())
+    print(data_manager.get_next_answer_id())
     return render_template('index.html', questions=sorted_questions)
 
 
