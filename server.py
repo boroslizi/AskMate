@@ -3,6 +3,8 @@ import data_manager
 
 app = Flask(__name__)
 
+latest_opened_question_id = 0
+
 
 @app.route('/')
 @app.route('/list')
@@ -13,6 +15,8 @@ def index():
 
 @app.route('/question/<question_id>')
 def display_question(question_id):
+    global latest_opened_question_id
+    latest_opened_question_id = question_id
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers_by_question_id(question_id)
     return render_template('display_question.html', question=question, answers=answers)
@@ -77,7 +81,8 @@ def add_new_answer(question_id):
 @app.route('/answer/<answer_id>/delete')
 def delete_answer(answer_id):
     data_manager.delete_answer_by_id(answer_id)
-    return redirect(url_for('index'))
+    global latest_opened_question_id
+    return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
 
 if __name__ == "__main__":
