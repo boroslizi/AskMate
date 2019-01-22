@@ -32,11 +32,13 @@ def get_all_answer_headers(cursor):
     return table_headers
 
 
+"""
 @connection.connection_handler
 def write_to_questions(cursor, data):
     placeholders = ', '.join(['%s'] * len(data))
     qry = "INSERT INTO question VALUES (%s)" % (placeholders)
     cursor.execute(qry, data.values())
+"""
 
 
 @connection.connection_handler
