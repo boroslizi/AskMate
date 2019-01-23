@@ -12,6 +12,10 @@
 <form action="{{ url_for("vote_up", question_id=question['id']) }}" method="post">
     <button type="submit">Vote up</button>
 </form>
+<br>
+<form action="{{ url_for("add_comment_to_question", question_id=question['id']) }}">
+    <button type="submit">Add comment</button>
+</form>
     <table>
         <tr>
             <th>Id</th>
@@ -30,6 +34,21 @@
             <td>{{ question['image'] }}</td>
         </tr>
     </table>
+<br>
+{% if (comments is defined) and comments %}
+<h3>Comments</h3>
+    <table>
+        <tr>
+            <th>Comment</th>
+        </tr>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment['message'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+<br>
 {% if (answers is defined) and answers %}
 <h3>Answers</h3>
     <table>
