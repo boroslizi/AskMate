@@ -18,7 +18,8 @@ def display_question(question_id):
     global latest_opened_question_id
     latest_opened_question_id = question_id
     question = data_manager.get_question_by_id(question_id)
-    comments = data_manager.get_comments_by_question_id(question_id)answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
+    comments = data_manager.get_comments_by_question_id(question_id)
+    answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
     return render_template('display_question.html', question=question, answers=answers, comments=comments)
 
 
