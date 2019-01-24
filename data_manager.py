@@ -279,7 +279,6 @@ def vote_down_for_answers(cursor, answer_id):
                    {'id': answer_id})
 
 
-
 @connection.connection_handler
 def search_in_questions(cursor, search_phrase):
     cursor.execute("""SELECT * FROM question

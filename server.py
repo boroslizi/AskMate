@@ -159,8 +159,7 @@ def edit_comment(comment_id):
         question_id = data_manager.get_answer_by_id(comment['answer_id'])['question_id']
     edited_comment_data = {
         'message': request.form.get('message'),
-        'edited_count': (comment['edited_count'] + 1) if not None else 1
-        }
+        'edited_count': comment['edited_count'] + 1 if type(comment['edited_count']) is int else 1}
     data_manager.edit_comment(comment_id, edited_comment_data)
     return redirect(url_for('display_question', question_id=question_id))
 
