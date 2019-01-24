@@ -17,6 +17,13 @@ def get_all_questions(cursor):
 
 
 @connection.connection_handler
+def get_all_comments(cursor):
+    cursor.execute("""SELECT * FROM comment;""")
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection.connection_handler
 def get_all_question_headers(cursor):
     cursor.execute("""SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
                       WHERE TABLE_NAME = 'question';""")
@@ -32,19 +39,17 @@ def get_all_answer_headers(cursor):
     return table_headers
 
 
-"""
-@connection.connection_handler
-def write_to_questions(cursor, data):
-    placeholders = ', '.join(['%s'] * len(data))
-    qry = "INSERT INTO question VALUES (%s)" % (placeholders)
-    cursor.execute(qry, data.values())
-"""
+# @connection.connection_handler
+# def write_to_questions(cursor, data):
+#     placeholders = ', '.join(['%s'] * len(data))
+#     qry = "INSERT INTO question VALUES (%s)" % (placeholders)
+#     cursor.execute(qry, data.values())
 
 
 @connection.connection_handler
 def write_to_questions(cursor, data):
-    cursor.execute("""INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, 
-                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);""",
+    cursor.execute("""INSERT INTO question VALUES (%(id)s, %(submission_time)s, %(view_number)s, 
+                    %(vote_number)s, %(title)s, %(message)s, %(image)s);""",
                    {'id_value': data['id'],
                     'submission_time_value': data['submission_time'],
                     'view_number_value': data['view_number'],
@@ -74,7 +79,7 @@ def write_to_comments(cursor, data):
                     'question_id_value': data['question_id'] if data['type'] == 'question' else None,
                     'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
                     'message_value': data['message'],
-                    'submission_time_value': datetime.now(),
+                    'submission_time_value': datetime.now().replace(microsecond=0),
                     'edited_count_value': None})
 
 
@@ -144,15 +149,6 @@ def get_answers_by_question_id(cursor, question_id):
 
 
 @connection.connection_handler
-def get_comments_by_question_id(cursor, question_id):
-    cursor.execute("""SELECT * FROM comment
-                      WHERE question_id=%(id)s;""",
-                   {'id': question_id})
-    comments = cursor.fetchall()
-    return comments
-
-
-@connection.connection_handler
 def get_comment_by_id(cursor, comment_id):
     cursor.execute("""SELECT * FROM comment
                       WHERE id=%(id)s;""",
@@ -167,7 +163,7 @@ def edit_question(cursor, question_id, edited_data):
                       SET submission_time = %(submission_time_value)s, title = %(title_value)s, 
                       message = %(message_value)s, image = %(image_value)s
                       WHERE id=%(id)s;""",
-                   {'submission_time_value': datetime.now(),
+                   {'submission_time_value': datetime.now().replace(microsecond=0),
                     'title_value': edited_data['title'],
                     'message_value': edited_data['message'],
                     'image_value': edited_data['image'],
@@ -180,7 +176,7 @@ def edit_answer(cursor, answer_id, edited_data):
                       SET submission_time = %(submission_time_value)s, message = %(message_value)s,
                       image = %(image_value)s
                       WHERE id=%(id)s;""",
-                   {'submission_time_value': datetime.now(),
+                   {'submission_time_value': datetime.now().replace(microsecond=0),
                     'message_value': edited_data['message'],
                     'image_value': edited_data['image'],
                     'id': answer_id})
@@ -193,7 +189,7 @@ def edit_comment(cursor, comment_id, edited_data):
                       edited_count = %(edited_count_value)s
                       WHERE id=%(id)s;""",
                    {'message_value': edited_data['message'],
-                    'submission_time_value': datetime.now(),
+                    'submission_time_value': datetime.now().replace(microsecond=0),
                     'edited_count_value': edited_data['edited_count'],
                     'id': comment_id})
 
@@ -225,7 +221,7 @@ def delete_comment_by_id(cursor, comment_id):
 def add_new_question():
     new_question_data = {
         'id': get_next_question_id(),
-        'submission_time': datetime.now(),
+        'submission_time': datetime.now().replace(microsecond=0),
         'view_number': 0,
         'vote_number': 0
         }
@@ -235,7 +231,7 @@ def add_new_question():
 def add_new_answer(new_answer, question_id):
     new_data = {
         "id": get_next_answer_id(),
-        "submission_time": datetime.now(),
+        "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": "0",
         "question_id": question_id,
         "message": new_answer,

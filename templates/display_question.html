@@ -54,11 +54,7 @@
             <th>Delete</th>
         </tr>
         {% for comment in comments %}
-            {% if (comment['question_id'] != null) %}
-                <tr>
-                    <td>{{ comment['message'] }}</td>
-                </tr>
-            {% endif %}
+        {% if (comment['question_id'] != null) %}
         <tr>
             <td>{{ comment['id'] }}</td>
             <td>{{ comment['message'] }}</td>
@@ -67,6 +63,7 @@
             <td>{{ comment['edited_count'] }}</td>
             <td id="bin"><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
         </tr>
+        {% endif %}
         {% endfor %}
     </table>
 {% endif %}
@@ -81,8 +78,8 @@
             <th>Submission time</th>
             <th>Vote buttons</th>
             <th>Votes</th>
-            <th>Edit</th>
             <th>Add comment</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         {% for answer in answers %}
@@ -90,13 +87,13 @@
             <td>{{ answer['id'] }}</td>
             <td>{{ answer['message'] }}</td>
             <td>
-                    {% for comment in comments %}
-                        {% if (comment['answer_id'] != null and comment['answer_id'] == answer['id']) %}
-                            <tr>
-                                <td>{{ comment['message'] }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                <ul>
+                {% for comment in comments %}
+                    {% if comment['answer_id'] == answer['id'] %}
+                        <li>{{ comment['message'] }} <a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"><i class='far fa-trash-alt' style='font-size:14px'></i></a></li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
             </td>
             <th>{{ answer['submission_time'] }}</th>
             <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
@@ -107,12 +104,9 @@
                 </form>
             </td>
             <td>{{ answer['vote_number'] }}</td>
+            <td><a href="{{ url_for('add_comment_to_answer', answer_id = answer['id'], question_id=question['id']) }}">Add</a></td>
             <td><a href="{{ url_for('edit_answer', answer_id=answer['id']) }}">Modify</a></td>
-                <form action="{{ url_for("add_comment_to_answer", answer_id = answer['id'], question_id=question['id']) }}">
-                    <button type="submit">Add comment</button>
-                </form>
             <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
-
         </tr>
         {% endfor %}
     </table>
