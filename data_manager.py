@@ -133,6 +133,15 @@ def get_answer_by_id(cursor, answer_id):
 
 
 @connection.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""SELECT * FROM comment
+                      WHERE id=%(id)s;""",
+                   {'id': comment_id})
+    comment_data = cursor.fetchall()[0]
+    return comment_data
+
+
+@connection.connection_handler
 def get_answers_by_question_id(cursor, question_id):
     cursor.execute("""SELECT * FROM answer
                       WHERE question_id=%(id)s;""",
