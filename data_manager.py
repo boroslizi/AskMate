@@ -51,8 +51,7 @@ def write_to_questions(cursor, data):
                     'vote_number_value': data['vote_number'],
                     'title_value': data['title'],
                     'message_value': data['message'],
-                    'image_value': data['image']}
-                   )
+                    'image_value': data['image']})
 
 
 @connection.connection_handler
@@ -64,8 +63,19 @@ def write_to_answers(cursor, data):
                     'vote_number_value': data['vote_number'],
                     'question_id_value': data['question_id'],
                     'message_value': data['message'],
-                    'image_value': data['image']}
-                   )
+                    'image_value': data['image']})
+
+
+@connection.connection_handler
+def write_to_comments(cursor, data):
+    cursor.execute("""INSERT INTO comment VALUES (%(id_value)s, %(question_id_value)s, %(answer_id_value)s, 
+                    %(message_value)s, %(submission_time_value)s, %(edited_count_value)s);""",
+                   {'id_value': get_next_comment_id(),
+                    'question_id_value': data['question_id'] if data['type'] == 'question' else None,
+                    'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
+                    'message_value': data['message'],
+                    'submission_time_value': datetime.now(),
+                    'edited_count_value': None})
 
 
 @connection.connection_handler
@@ -97,6 +107,16 @@ def get_next_answer_id(cursor):
 
 
 @connection.connection_handler
+def get_next_comment_id(cursor):
+    try:
+        cursor.execute("""SELECT MAX(id) from comment;""")
+        new_id = cursor.fetchall()[0]['max'] + 1
+    except KeyError:
+        new_id = 0
+    return new_id
+
+
+@connection.connection_handler
 def get_question_by_id(cursor, question_id):
     cursor.execute("""SELECT * FROM question
                       WHERE id=%(id)s;""",
@@ -112,6 +132,15 @@ def get_answers_by_question_id(cursor, question_id):
                    {'id': question_id})
     answers = cursor.fetchall()
     return answers
+
+
+@connection.connection_handler
+def get_comments_by_question_id(cursor, question_id):
+    cursor.execute("""SELECT * FROM comment
+                      WHERE question_id=%(id)s;""",
+                   {'id': question_id})
+    comments = cursor.fetchall()
+    return comments
 
 
 @connection.connection_handler

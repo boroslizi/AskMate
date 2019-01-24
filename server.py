@@ -18,8 +18,8 @@ def display_question(question_id):
     global latest_opened_question_id
     latest_opened_question_id = question_id
     question = data_manager.get_question_by_id(question_id)
-    answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
-    return render_template('display_question.html', question=question, answers=answers)
+    comments = data_manager.get_comments_by_question_id(question_id)answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
+    return render_template('display_question.html', question=question, answers=answers, comments=comments)
 
 
 @app.route('/questions/<question_id>/vote-up', methods=['POST'])
@@ -73,6 +73,22 @@ def edit_question(question_id):
             }
     data_manager.edit_question(question_id, edited_question_data)
     return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+def add_comment_to_question(question_id):
+    if request.method == "GET":
+        question = data_manager.get_question_by_id(question_id)
+        return render_template('new_comment_q.html', question=question)
+
+    new_comment_to_question = {
+        'message': request.form.get('comment'),
+        'type': 'question',
+        'question_id': question_id
+        }
+    data_manager.write_to_comments(new_comment_to_question)
+    global latest_opened_question_id
+    return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
 
 @app.route('/question/<question_id>/delete')
