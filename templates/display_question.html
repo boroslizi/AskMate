@@ -44,10 +44,18 @@
     <table>
         <tr>
             <th>Comment</th>
+            <th>Submission time</th>
+            <th>Edit</th>
+            <th>Edited count</th>
+{#            <th>Delete</th>#}
         </tr>
         {% for comment in comments %}
         <tr>
             <td>{{ comment['message'] }}</td>
+            <td>{{ comment['submission_time'] }}</td>
+            <td><a href="{{ url_for('edit_comment', comment_id=comment['id']) }}">Modify</a></td>
+            <td>{{ comment['edited_count'] }}</td>
+{#            <td id="bin"><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>#}
         </tr>
         {% endfor %}
     </table>
@@ -58,13 +66,16 @@
     <table>
         <tr>
             <th>Answer</th>
+            <th>Submission time</th>
             <th>Vote buttons</th>
             <th>Votes</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         {% for answer in answers %}
         <tr>
             <td>{{ answer['message'] }}</td>
+            <th>{{ answer['submission_time'] }}</th>
             <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
                 <button type="submit">Vote up</button>
                 </form>
@@ -73,6 +84,7 @@
                 </form>
             </td>
             <td>{{ answer['vote_number'] }}</td>
+            <td><a href="{{ url_for('edit_answer', answer_id=answer['id']) }}">Modify</a></td>
             <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
 
         </tr>
@@ -80,7 +92,7 @@
     </table>
 {% endif %}
 <br>
-<a href="{{ url_for("route_add_new_answer", question_id=question['id']) }}">Add new answer</a>
+<a href="{{ url_for("add_new_answer", question_id=question['id']) }}">Add new answer</a>
 <br>
 <a href="{{ url_for("route_to_all_questions") }}">Home page</a>
 {% endblock %}

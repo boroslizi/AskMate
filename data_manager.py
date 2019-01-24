@@ -126,6 +126,15 @@ def get_question_by_id(cursor, question_id):
 
 
 @connection.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute("""SELECT * FROM answer
+                      WHERE id=%(id)s;""",
+                   {'id': answer_id})
+    answer_data = cursor.fetchall()[0]
+    return answer_data
+
+
+@connection.connection_handler
 def get_answers_by_question_id(cursor, question_id):
     cursor.execute("""SELECT * FROM answer
                       WHERE question_id=%(id)s;""",
@@ -144,6 +153,15 @@ def get_comments_by_question_id(cursor, question_id):
 
 
 @connection.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""SELECT * FROM comment
+                      WHERE id=%(id)s;""",
+                   {'id': comment_id})
+    comment_data = cursor.fetchall()[0]
+    return comment_data
+
+
+@connection.connection_handler
 def edit_question(cursor, question_id, edited_data):
     cursor.execute("""UPDATE question
                       SET submission_time = %(submission_time_value)s, title = %(title_value)s, 
@@ -154,6 +172,30 @@ def edit_question(cursor, question_id, edited_data):
                     'message_value': edited_data['message'],
                     'image_value': edited_data['image'],
                     'id': question_id})
+
+
+@connection.connection_handler
+def edit_answer(cursor, answer_id, edited_data):
+    cursor.execute("""UPDATE answer
+                      SET submission_time = %(submission_time_value)s, message = %(message_value)s,
+                      image = %(image_value)s
+                      WHERE id=%(id)s;""",
+                   {'submission_time_value': datetime.now(),
+                    'message_value': edited_data['message'],
+                    'image_value': edited_data['image'],
+                    'id': answer_id})
+
+
+@connection.connection_handler
+def edit_comment(cursor, comment_id, edited_data):
+    cursor.execute("""UPDATE comment
+                      SET submission_time = %(submission_time_value)s, message = %(message_value)s,
+                      edited_count = %(edited_count_value)s
+                      WHERE id=%(id)s;""",
+                   {'message_value': edited_data['message'],
+                    'submission_time_value': datetime.now(),
+                    'edited_count_value': edited_data['edited_count'],
+                    'id': comment_id})
 
 
 @connection.connection_handler
@@ -194,6 +236,7 @@ def add_new_answer(new_answer, question_id):
     }
     write_to_answers(new_data)
 
+
 @connection.connection_handler
 def get_all_answers_by_id_ordered_by_vote_number(cursor, question_id):
     cursor.execute("""SELECT * FROM answer
@@ -203,30 +246,38 @@ def get_all_answers_by_id_ordered_by_vote_number(cursor, question_id):
     answers = cursor.fetchall()
     return answers
 
+
 @connection.connection_handler
 def vote_up_for_questions(cursor, question_id):
     cursor.execute("""UPDATE question
                           SET vote_number = vote_number + 1
                           WHERE id=%(id)s;""",
                    {'id': int(question_id)})
+
+
 @connection.connection_handler
 def vote_down_for_questions(cursor, question_id):
     cursor.execute("""UPDATE question
                           SET vote_number = vote_number - 1
                           WHERE id=%(id)s;""",
                    {'id': int(question_id)})
+
+
 @connection.connection_handler
 def vote_up_for_answers(cursor, answer_id):
     cursor.execute("""UPDATE answer
                           SET vote_number = vote_number + 1
                           WHERE id = %(id)s;""",
                    {'id': answer_id})
+
+
 @connection.connection_handler
 def vote_down_for_answers(cursor, answer_id):
     cursor.execute("""UPDATE answer
                           SET vote_number = vote_number - 1
                           WHERE id = %(id)s;""",
                    {'id': answer_id})
+
 
 
 @connection.connection_handler

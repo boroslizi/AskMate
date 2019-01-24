@@ -41,15 +41,18 @@ def question_vote_up(question_id):
     data_manager.vote_up_for_questions(question_id)
     return redirect(url_for('display_question', question_id=question_id))
 
+
 @app.route('/questions/<question_id>/vote-down', methods=['POST'])
 def question_vote_down(question_id):
     data_manager.vote_down_for_questions(question_id)
     return redirect(url_for('display_question', question_id=question_id))
 
+
 @app.route('/answers/<question_id>/<answer_id>/vote-up', methods=['POST'])
 def answer_vote_up(question_id, answer_id):
     data_manager.vote_up_for_answers(answer_id)
     return redirect(url_for('display_question', question_id=question_id))
+
 
 @app.route('/questions/<question_id>/<answer_id>/vote-down', methods=['POST'])
 def answer_vote_down(question_id, answer_id):
@@ -111,16 +114,29 @@ def delete_question(question_id):
     return redirect(url_for('route_to_all_questions'))
 
 
-@app.route("/question/<question_id>/new-answer")
-def route_add_new_answer(question_id):
-    return render_template("new_answer.html", question_id=question_id)
-
-
-@app.route("/question/<question_id>/new-answer", methods=["POST"])
+@app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def add_new_answer(question_id):
+    if request.method == "GET":
+        return render_template("new_answer.html", question_id=question_id)
+
     new_answer = request.form["new_answer"]
     data_manager.add_new_answer(new_answer, question_id)
     return redirect(url_for("display_question", question_id=question_id))
+
+
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    if request.method == "GET":
+        answer = data_manager.get_answer_by_id(answer_id)
+        return render_template('edit_answer.html', answer=answer)
+
+    question_id = data_manager.get_answer_by_id(answer_id)['question_id']
+    edited_answer_data = {
+            'message': request.form.get('message'),
+            'image': request.form.get('image')
+            }
+    data_manager.edit_answer(answer_id, edited_answer_data)
+    return redirect(url_for('display_question', question_id=question_id))
 
 
 @app.route('/answer/<answer_id>/delete')
@@ -128,6 +144,25 @@ def delete_answer(answer_id):
     data_manager.delete_answer_by_id(answer_id)
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
+
+
+@app.route('/comment/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    if request.method == "GET":
+        comment = data_manager.get_comment_by_id(comment_id)
+        return render_template('edit_comment.html', comment=comment)
+
+    comment = data_manager.get_comment_by_id(comment_id)
+    if comment['question_id']:
+        question_id = comment['question_id']
+    else:
+        question_id = data_manager.get_answer_by_id(comment['answer_id'])['question_id']
+    edited_comment_data = {
+        'message': request.form.get('message'),
+        'edited_count': (comment['edited_count'] + 1) if not None else 1
+        }
+    data_manager.edit_comment(comment_id, edited_comment_data)
+    return redirect(url_for('display_question', question_id=question_id))
 
 
 if __name__ == "__main__":
