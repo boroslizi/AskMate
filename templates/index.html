@@ -8,12 +8,19 @@
 {% endblock %}
 {% block body %}
 <h1>Latest Questions</h1>
-<div class="search_box">
+<div class="buttons">
     <form action="{{ url_for('search') }}" method='post'>
         <label for="search_phrase"></label>
         <input type='text' id='search_phrase' name="search_phrase" required>
         <button type="submit">Search</button>
     </form>
+    <form action="{{ url_for('add_question') }}">
+        <input type="submit" value="Ask a Question">
+    </form>
+    <form action="{{ url_for('route_to_all_questions') }}">
+        <input type="submit" value="Show all questions">
+    </form>
+
 </div>
 <table>
     <tr>
@@ -29,9 +36,4 @@
     </tr>
     {% endfor %}
 </table>
-<p></p>
-<form action="{{ url_for('add_question') }}">
-    <input type="submit" value="Ask a Question">
-</form>
-    <a href="{{ url_for('route_to_all_questions') }}">Show all questions</a>
 {% endblock %}

@@ -215,6 +215,13 @@ def delete_answer_by_id(cursor, answer_id):
                    {'id': answer_id})
 
 
+@connection.connection_handler
+def delete_comment_by_id(cursor, comment_id):
+    cursor.execute("""DELETE FROM comment
+                      WHERE id=%(id)s;""",
+                   {'id': comment_id})
+
+
 def add_new_question():
     new_question_data = {
         'id': get_next_question_id(),

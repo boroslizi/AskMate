@@ -15,6 +15,7 @@ th, td {
     text-align: center;
 }
 
-.search_box {
-    float: right;
+
+.buttons form {
+    display:inline-block;
 }

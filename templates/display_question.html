@@ -9,17 +9,17 @@
 {% block body %}
 <h1>Question</h1>
 <h3>{{ question['title'] }}</h3>
+<div class="buttons">
 <form action="{{ url_for("question_vote_up", question_id=question['id']) }}" method="post">
     <button type="submit">Vote up</button>
 </form>
 <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
     <button type="submit">Vote down</button>
 </form>
-<h3>{{ question['vote_number'] }}</h3>
-<br>
 <form action="{{ url_for("add_comment_to_question", question_id=question['id']) }}">
     <button type="submit">Add comment</button>
 </form>
+</div>
     <table>
         <tr>
             <th>Id</th>
@@ -47,7 +47,7 @@
             <th>Submission time</th>
             <th>Edit</th>
             <th>Edited count</th>
-{#            <th>Delete</th>#}
+            <th>Delete</th>
         </tr>
         {% for comment in comments %}
         <tr>
@@ -55,7 +55,7 @@
             <td>{{ comment['submission_time'] }}</td>
             <td><a href="{{ url_for('edit_comment', comment_id=comment['id']) }}">Modify</a></td>
             <td>{{ comment['edited_count'] }}</td>
-{#            <td id="bin"><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>#}
+            <td id="bin"><a href="{{ url_for('delete_comment', comment_id=comment['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
         </tr>
         {% endfor %}
     </table>
@@ -94,5 +94,5 @@
 <br>
 <a href="{{ url_for("add_new_answer", question_id=question['id']) }}">Add new answer</a>
 <br>
-<a href="{{ url_for("route_to_all_questions") }}">Home page</a>
+<a href="{{ url_for("index") }}">Home page</a>
 {% endblock %}

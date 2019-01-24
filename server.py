@@ -164,5 +164,12 @@ def edit_comment(comment_id):
     return redirect(url_for('display_question', question_id=question_id))
 
 
+@app.route('/comment/<comment_id>/delete')
+def delete_comment(comment_id):
+    data_manager.delete_comment_by_id(comment_id)
+    global latest_opened_question_id
+    return redirect(url_for('display_question', question_id=latest_opened_question_id))
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=7000)
