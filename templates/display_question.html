@@ -55,7 +55,7 @@
         </tr>
         {% for comment in comments %}
         <tr>
-            <td>{{ xomment['id'] }}</td>
+            <td>{{ comment['id'] }}</td>
             <td>{{ comment['message'] }}</td>
             <td>{{ comment['submission_time'] }}</td>
             <td><a href="{{ url_for('edit_comment', comment_id=comment['id']) }}">Modify</a></td>
