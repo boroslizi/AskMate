@@ -139,6 +139,23 @@ def edit_answer(answer_id):
     return redirect(url_for('display_question', question_id=question_id))
 
 
+@app.route('/answer/<answer_id>/<question_id>/new-comment', methods=['GET', 'POST'])
+def add_comment_to_answer(answer_id, question_id):
+    if request.method == "GET":
+        answer = data_manager.get_answer_by_id(answer_id)
+        question = data_manager.get_question_by_id(question_id)
+        return render_template('add_comment_to_answer.html', answer=answer, question=question)
+
+    new_comment_to_answer = {
+        'message': request.form.get('comment'),
+        'type': 'answer',
+        'answer_id': answer_id
+        }
+    data_manager.write_to_comments(new_comment_to_answer)
+    global latest_opened_question_id
+    return redirect(url_for('display_question', question_id=latest_opened_question_id))
+
+
 @app.route('/answer/<answer_id>/delete')
 def delete_answer(answer_id):
     data_manager.delete_answer_by_id(answer_id)

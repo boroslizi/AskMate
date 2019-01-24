@@ -54,6 +54,11 @@
             <th>Delete</th>
         </tr>
         {% for comment in comments %}
+            {% if (comment['question_id'] != null) %}
+                <tr>
+                    <td>{{ comment['message'] }}</td>
+                </tr>
+            {% endif %}
         <tr>
             <td>{{ comment['id'] }}</td>
             <td>{{ comment['message'] }}</td>
@@ -72,16 +77,27 @@
         <tr>
             <th>ID</th>
             <th>Answer</th>
+            <th>Comments</th>
             <th>Submission time</th>
             <th>Vote buttons</th>
             <th>Votes</th>
             <th>Edit</th>
+            <th>Add comment</th>
             <th>Delete</th>
         </tr>
         {% for answer in answers %}
         <tr>
             <td>{{ answer['id'] }}</td>
             <td>{{ answer['message'] }}</td>
+            <td>
+                    {% for comment in comments %}
+                        {% if (comment['answer_id'] != null and comment['answer_id'] == answer['id']) %}
+                            <tr>
+                                <td>{{ comment['message'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+            </td>
             <th>{{ answer['submission_time'] }}</th>
             <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
                 <button type="submit">Vote up</button>
@@ -92,6 +108,9 @@
             </td>
             <td>{{ answer['vote_number'] }}</td>
             <td><a href="{{ url_for('edit_answer', answer_id=answer['id']) }}">Modify</a></td>
+                <form action="{{ url_for("add_comment_to_answer", answer_id = answer['id'], question_id=question['id']) }}">
+                    <button type="submit">Add comment</button>
+                </form>
             <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
 
         </tr>
