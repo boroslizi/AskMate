@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Display question{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+          integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/'
+          crossorigin='anonymous'>
+{% endblock %}
+{% block body %}
+<h1>Results of searching for "{{ search_phrase }}"</h1>
+<h2>In questions:</h2>
+<table>
+    <th>
+        <td>id</td>
+        <td>submission time</td>
+        <td>view number</td>
+        <td>vote number</td>
+        <td>title</td>
+        <td>message</td>
+        <td>image</td>
+    </th>
+    {% for question in questions %}
+        <tr>
+            <td>{{ question['id'] }}</td>
+            <td>{{ question['submission_time'] }}</td>
+            <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}</td>
+            <td>{{ question['title'] }}</td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['image'] }}</td>
+            <td><a href="{{ url_for('display_question', question_id=question['id']) }}">See question</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<h2>In answers:</h2>
+<table>
+    <th>
+        <td>id</td>
+        <td>submission time</td>
+        <td>view number</td>
+        <td>vote number</td>
+        <td>question id</td>
+        <td>message</td>
+        <td>image</td>
+    </th>
+    {% for answer in answers %}
+        <tr>
+            <td>{{ answer['id'] }}</td>
+            <td>{{ answer['submission_time'] }}</td>
+            <td>{{ answer['vote_number'] }}</td>
+            <td>{{ answer['question_id'] }}</td>
+            <td>{{ answer['message'] }}</td>
+            <td>{{ answer['image'] }}</td>
+            <td><a href="{{ url_for('display_question', question_id=answer['question_id']) }}">See question</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+<a href="{{ url_for('index') }}">Back to home</a>
+{% endblock %}

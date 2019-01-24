@@ -13,6 +13,14 @@ def index():
     return render_template('index.html', questions=sorted_questions)
 
 
+@app.route('/search', methods=['POST'])
+def search():
+    search_phrase = request.form.get('search_phrase')
+    questions = data_manager.search_in_questions(search_phrase)
+    answers = data_manager.search_in_answers(search_phrase)
+    return render_template('search.html', search_phrase=search_phrase, questions=questions, answers=answers)
+
+
 @app.route('/question/<question_id>')
 def display_question(question_id):
     global latest_opened_question_id

@@ -227,3 +227,21 @@ def vote_down_for_answers(cursor, answer_id):
                           SET vote_number = vote_number - 1
                           WHERE id = %(id)s;""",
                    {'id': answer_id})
+
+
+@connection.connection_handler
+def search_in_questions(cursor, search_phrase):
+    cursor.execute("""SELECT * FROM question
+                      WHERE title LIKE %(search_phrase)s OR message LIKE %(search_phrase)s;""",
+                   {'search_phrase': '%' + search_phrase + '%'})
+    question_data = cursor.fetchall()
+    return question_data
+
+
+@connection.connection_handler
+def search_in_answers(cursor, search_phrase):
+    cursor.execute("""SELECT * FROM answer
+                      WHERE message LIKE %(search_phrase)s;""",
+                   {'search_phrase': '%' + search_phrase + '%'})
+    answer_data = cursor.fetchall()
+    return answer_data

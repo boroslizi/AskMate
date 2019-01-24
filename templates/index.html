@@ -8,6 +8,13 @@
 {% endblock %}
 {% block body %}
 <h1>Questions</h1>
+<div class="search_box">
+    <form action="{{ url_for('search') }}" method='post'>
+        <label for="search_phrase"></label>
+        <input type='text' id='search_phrase' name="search_phrase" required>
+        <button type="submit">Search</button>
+    </form>
+</div>
 <table>
     <tr>
         <th>Question</th>

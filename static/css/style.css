@@ -14,3 +14,7 @@ th, td {
 #bin {
     text-align: center;
 }
+
+.search_box {
+    float: right;
+}
