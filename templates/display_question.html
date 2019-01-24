@@ -16,13 +16,16 @@
 <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
     <button type="submit">Vote down</button>
 </form>
+<form action="{{ url_for("add_new_answer", question_id=question['id']) }}">
+    <button type="submit">Add new answer</button>
+</form>
 <form action="{{ url_for("add_comment_to_question", question_id=question['id']) }}">
     <button type="submit">Add comment</button>
 </form>
 </div>
     <table>
         <tr>
-            <th>Id</th>
+            <th>ID</th>
             <th>Submission time</th>
             <th>View number</th>
             <th>Vote number</th>
@@ -38,11 +41,12 @@
             <td>{{ question['image'] }}</td>
         </tr>
     </table>
-<br>
 {% if (comments is defined) and comments %}
+<br>
 <h3>Comments</h3>
     <table>
         <tr>
+            <th>ID</th>
             <th>Comment</th>
             <th>Submission time</th>
             <th>Edit</th>
@@ -51,6 +55,7 @@
         </tr>
         {% for comment in comments %}
         <tr>
+            <td>{{ xomment['id'] }}</td>
             <td>{{ comment['message'] }}</td>
             <td>{{ comment['submission_time'] }}</td>
             <td><a href="{{ url_for('edit_comment', comment_id=comment['id']) }}">Modify</a></td>
@@ -60,11 +65,12 @@
         {% endfor %}
     </table>
 {% endif %}
-<br>
 {% if (answers is defined) and answers %}
+<br>
 <h3>Answers</h3>
     <table>
         <tr>
+            <th>ID</th>
             <th>Answer</th>
             <th>Submission time</th>
             <th>Vote buttons</th>
@@ -74,6 +80,7 @@
         </tr>
         {% for answer in answers %}
         <tr>
+            <td>{{ answer['id'] }}</td>
             <td>{{ answer['message'] }}</td>
             <th>{{ answer['submission_time'] }}</th>
             <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
@@ -91,8 +98,6 @@
         {% endfor %}
     </table>
 {% endif %}
-<br>
-<a href="{{ url_for("add_new_answer", question_id=question['id']) }}">Add new answer</a>
 <br>
 <a href="{{ url_for("index") }}">Home page</a>
 {% endblock %}

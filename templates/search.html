@@ -8,17 +8,20 @@
 {% endblock %}
 {% block body %}
 <h1>Results of searching for "{{ search_phrase }}"</h1>
+{% if (questions is defined) and questions %}
+<br>
 <h2>In questions:</h2>
 <table>
-    <th>
-        <td>id</td>
-        <td>submission time</td>
-        <td>view number</td>
-        <td>vote number</td>
-        <td>title</td>
-        <td>message</td>
-        <td>image</td>
-    </th>
+    <tr>
+        <th>ID</th>
+        <th>Submission time</th>
+        <th>View number</th>
+        <th>Vote number</th>
+        <th>Title</th>
+        <th>Message</th>
+        <th>Image</th>
+        <th>View</th>
+    </tr>
     {% for question in questions %}
         <tr>
             <td>{{ question['id'] }}</td>
@@ -32,17 +35,19 @@
         </tr>
     {% endfor %}
 </table>
+{% endif %}
+{% if (answers is defined) and answers %}
+<br>
 <h2>In answers:</h2>
 <table>
     <th>
-        <td>id</td>
-        <td>submission time</td>
-        <td>view number</td>
+        <td>ID</td>
+        <td>Submission time</td>
         <td>vote number</td>
-        <td>question id</td>
-        <td>message</td>
-        <td>image</td>
-    </th>
+        <td>Question ID</td>
+        <td>Message</td>
+        <td>Image</td>
+        <th>View</th>
     {% for answer in answers %}
         <tr>
             <td>{{ answer['id'] }}</td>
@@ -55,6 +60,7 @@
         </tr>
     {% endfor %}
 </table>
+{% endif %}
 <br>
-<a href="{{ url_for('route_to_all_questions') }}">Back to home</a>
+<a href="{{ url_for('index') }}">Back to home</a>
 {% endblock %}
