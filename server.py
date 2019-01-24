@@ -31,8 +31,8 @@ def display_question(question_id):
     global latest_opened_question_id
     latest_opened_question_id = question_id
     question = data_manager.get_question_by_id(question_id)
-    comments = data_manager.get_all_comments()
     answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
+    comments = data_manager.get_all_comments()
     return render_template('display_question.html', question=question, answers=answers, comments=comments)
 
 
@@ -96,7 +96,7 @@ def edit_question(question_id):
 def add_comment_to_question(question_id):
     if request.method == "GET":
         question = data_manager.get_question_by_id(question_id)
-        return render_template('new_comment_q.html', question=question)
+        return render_template('add_comment_to_question.html', question=question)
 
     new_comment_to_question = {
         'message': request.form.get('comment'),

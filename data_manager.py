@@ -23,6 +23,15 @@ def get_all_comments(cursor):
     return comments
 
 
+# def get_question_comments(question_id):
+#     all_comments = get_all_comments()
+#     question_comments = []
+#     for comment_data in all_comments:
+#         if comment_data['question_id'] == question_id:
+#             question_comments.append(comment_data)
+#     return question_comments
+
+
 @connection.connection_handler
 def get_all_question_headers(cursor):
     cursor.execute("""SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
@@ -149,12 +158,39 @@ def get_answers_by_question_id(cursor, question_id):
 
 
 @connection.connection_handler
-def get_comment_by_id(cursor, comment_id):
+def get_comments_by_question_id(cursor, question_id):
     cursor.execute("""SELECT * FROM comment
-                      WHERE id=%(id)s;""",
-                   {'id': comment_id})
-    comment_data = cursor.fetchall()[0]
-    return comment_data
+                      WHERE question_id=%(id)s;""",
+                   {'id': question_id})
+    comments = cursor.fetchall()
+    return comments
+
+
+# @connection.connection_handler
+# def get_comments_by_question_id(cursor, question_id):
+#     cursor.execute("""SELECT id FROM answer
+#                       WHERE question_id=%(id)s;""",
+#                    {'id': question_id})
+#     comment_answer_ids = []
+#     for item in cursor.fetchall():
+#         comment_answer_ids.append(item['id'])
+#     comments = []
+#     for answer_id in comment_answer_ids:
+#         cursor.execute("""SELECT * FROM comment
+#                           WHERE answer_id=%(id)s;""",
+#                        {'id': answer_id})
+#         new_data = cursor.fetchall()
+#         comments += new_data
+#     return comments
+
+
+@connection.connection_handler
+def get_answer_comments_by_question_id(cursor, question_id):
+    cursor.execute("""SELECT * FROM comment
+                      WHERE question_id=%(id)s;""",
+                   {'id': question_id})
+    comments = cursor.fetchall()
+    return comments
 
 
 @connection.connection_handler
@@ -196,6 +232,9 @@ def edit_comment(cursor, comment_id, edited_data):
 
 @connection.connection_handler
 def delete_question_by_id(cursor, question_id):
+    cursor.execute("""DELETE FROM comment
+                      WHERE question_id=%(id)s;""",
+                   {'id': question_id})
     cursor.execute("""DELETE FROM answer
                       WHERE question_id=%(id)s;""",
                    {'id': question_id})
@@ -206,6 +245,9 @@ def delete_question_by_id(cursor, question_id):
 
 @connection.connection_handler
 def delete_answer_by_id(cursor, answer_id):
+    cursor.execute("""DELETE FROM comment
+                      WHERE answer_id=%(id)s;""",
+                   {'id': answer_id})
     cursor.execute("""DELETE FROM answer
                       WHERE id=%(id)s;""",
                    {'id': answer_id})
