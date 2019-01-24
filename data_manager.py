@@ -165,11 +165,36 @@ def add_new_answer(new_answer, question_id):
     }
     write_to_answers(new_data)
 
+@connection.connection_handler
+def get_all_answers_by_id_ordered_by_vote_number(cursor, question_id):
+    cursor.execute("""SELECT * FROM answer
+                      WHERE question_id=%(id)s
+                      ORDER BY vote_number DESC;""",
+                   {'id': question_id})
+    answers = cursor.fetchall()
+    return answers
 
-def vote_for_questions(vote, question_id):
-    question_to_vote = get_all_data_by_question_id(question_id, "questions")
-    if vote == "up":
-        question_to_vote['vote_number'] += 1
-    else:
-        question_to_vote['vote_number'] -= 1
-    connection.write_to_file(QUESTIONS, connection.get_all_data(QUESTIONS))
+@connection.connection_handler
+def vote_up_for_questions(cursor, question_id):
+    cursor.execute("""UPDATE question
+                          SET vote_number = vote_number + 1
+                          WHERE id=%(id)s;""",
+                   {'id': int(question_id)})
+@connection.connection_handler
+def vote_down_for_questions(cursor, question_id):
+    cursor.execute("""UPDATE question
+                          SET vote_number = vote_number - 1
+                          WHERE id=%(id)s;""",
+                   {'id': int(question_id)})
+@connection.connection_handler
+def vote_up_for_answers(cursor, answer_id):
+    cursor.execute("""UPDATE answer
+                          SET vote_number = vote_number + 1
+                          WHERE id = %(id)s;""",
+                   {'id': answer_id})
+@connection.connection_handler
+def vote_down_for_answers(cursor, answer_id):
+    cursor.execute("""UPDATE answer
+                          SET vote_number = vote_number - 1
+                          WHERE id = %(id)s;""",
+                   {'id': answer_id})

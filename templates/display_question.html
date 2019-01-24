@@ -9,9 +9,13 @@
 {% block body %}
 <h1>Question</h1>
 <h3>{{ question['title'] }}</h3>
-<form action="{{ url_for("vote_up", question_id=question['id']) }}" method="post">
+<form action="{{ url_for("question_vote_up", question_id=question['id']) }}" method="post">
     <button type="submit">Vote up</button>
 </form>
+<form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
+    <button type="submit">Vote down</button>
+</form>
+<h3>{{ question['vote_number'] }}</h3>
     <table>
         <tr>
             <th>Id</th>
@@ -35,12 +39,23 @@
     <table>
         <tr>
             <th>Answer</th>
+            <th>Vote buttons</th>
+            <th>Votes</th>
             <th>Delete</th>
         </tr>
         {% for answer in answers %}
         <tr>
             <td>{{ answer['message'] }}</td>
+            <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
+                <button type="submit">Vote up</button>
+                </form>
+                <form action="{{ url_for("answer_vote_down", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
+                <button type="submit">Vote down</button>
+                </form>
+            </td>
+            <td>{{ answer['vote_number'] }}</td>
             <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
+
         </tr>
         {% endfor %}
     </table>

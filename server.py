@@ -18,14 +18,29 @@ def display_question(question_id):
     global latest_opened_question_id
     latest_opened_question_id = question_id
     question = data_manager.get_question_by_id(question_id)
-    answers = data_manager.get_answers_by_question_id(question_id)
+    answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
     return render_template('display_question.html', question=question, answers=answers)
 
 
 @app.route('/questions/<question_id>/vote-up', methods=['POST'])
-def vote_up(question_id):
-    data_manager.vote_for_questions("up", question_id)
-    return redirect(url_for('display_question'))
+def question_vote_up(question_id):
+    data_manager.vote_up_for_questions(question_id)
+    return redirect(url_for('display_question', question_id=question_id))
+
+@app.route('/questions/<question_id>/vote-down', methods=['POST'])
+def question_vote_down(question_id):
+    data_manager.vote_down_for_questions(question_id)
+    return redirect(url_for('display_question', question_id=question_id))
+
+@app.route('/answers/<question_id>/<answer_id>/vote-up', methods=['POST'])
+def answer_vote_up(question_id, answer_id):
+    data_manager.vote_up_for_answers(answer_id)
+    return redirect(url_for('display_question', question_id=question_id))
+
+@app.route('/questions/<question_id>/<answer_id>/vote-down', methods=['POST'])
+def answer_vote_down(question_id, answer_id):
+    data_manager.vote_down_for_answers(answer_id)
+    return redirect(url_for('display_question', question_id=question_id))
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
