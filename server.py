@@ -7,10 +7,15 @@ latest_opened_question_id = 0
 
 
 @app.route('/')
-@app.route('/list')
 def index():
+    latest_questions = data_manager.get_latest_questions(5)
+    return render_template('index.html', questions=latest_questions)
+
+
+@app.route('/list')
+def route_to_all_questions():
     sorted_questions = data_manager.sort_questions_by_time()
-    return render_template('index.html', questions=sorted_questions)
+    return render_template('all_questions.html', questions=sorted_questions)
 
 
 @app.route('/search', methods=['POST'])
@@ -103,7 +108,7 @@ def add_comment_to_question(question_id):
 @app.route('/question/<question_id>/delete')
 def delete_question(question_id):
     data_manager.delete_question_by_id(question_id)
-    return redirect(url_for('index'))
+    return redirect(url_for('route_to_all_questions'))
 
 
 @app.route("/question/<question_id>/new-answer")

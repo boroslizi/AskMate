@@ -7,7 +7,7 @@
           crossorigin='anonymous'>
 {% endblock %}
 {% block body %}
-<h1>Latest Questions</h1>
+<h1>Questions</h1>
 <div class="search_box">
     <form action="{{ url_for('search') }}" method='post'>
         <label for="search_phrase"></label>
@@ -33,5 +33,4 @@
 <form action="{{ url_for('add_question') }}">
     <input type="submit" value="Ask a Question">
 </form>
-    <a href="{{ url_for('route_to_all_questions') }}">Show all questions</a>
 {% endblock %}
