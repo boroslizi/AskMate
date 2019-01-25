@@ -1,5 +1,6 @@
 body {
     padding: 10px;
+    background-color: #7abaff;
 }
 
 table {
@@ -18,4 +19,16 @@ th, td {
 
 .buttons form {
     display:inline-block;
+}
+
+a {
+
+    color: white;
+
+}
+
+th {
+
+    text-align: center;
+
 }

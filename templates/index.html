@@ -8,32 +8,22 @@
 {% endblock %}
 {% block body %}
 <h1>Latest Questions</h1>
-<div class="buttons">
-    <form action="{{ url_for('search') }}" method='post'>
-        <label for="search_phrase"></label>
-        <input type='text' id='search_phrase' name="search_phrase" required>
-        <button type="submit">Search</button>
-    </form>
-    <form action="{{ url_for('add_question') }}">
-        <input type="submit" value="Ask a Question">
-    </form>
-    <form action="{{ url_for('route_to_all_questions') }}">
-        <input type="submit" value="Show all questions">
-    </form>
-
-</div>
-<table>
+<table class="table table-hover table-dark">
+    <thead>
     <tr>
-        <th>Question</th>
-        <th>Edit</th>
-        <th>Delete</th>
+      <th scope="col">Question</th>
+      <th scope="col">Edit</th>
+      <th scope="col">Delete</th>
     </tr>
+    </thead>
+    <tbody>
     {% for question in questions %}
     <tr>
-        <td><a href="{{ url_for('display_question', question_id=question['id']) }}">{{ question['title'] }}</a></td>
+        <th scope="row"><a href="{{ url_for('display_question', question_id=question['id']) }}">{{ question['title'] }}</a></th></th>
         <td><a href="{{ url_for('edit_question', question_id=question['id']) }}">Modify</a></td>
         <td id="bin"><a href="{{ url_for('delete_question', question_id=question['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

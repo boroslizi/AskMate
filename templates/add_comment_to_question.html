@@ -2,9 +2,13 @@
 {% block title %}Add a Comment{% endblock %}
 {% block body %}
 <h1>New Comment</h1>
-<form action="{{ url_for('add_comment_to_question', question_id=question['id']) }}" method="post">
-    <p><label for="comment">Comment:</label><br>
-    <textarea id="comment" name="comment" rows="4" cols="40"></textarea></p>
-    <button type="submit">Submit comment</button>
-</form>
+<div class="form-group">
+    <div class="form-group col-md-4">
+        <form action="{{ url_for('add_comment_to_question', question_id=question['id']) }}" method="post">
+            <p><label for="comment">Comment:</label><br>
+            <textarea id="comment" name="comment" class="form-control" rows="4" cols="40"></textarea></p>
+            <button type="submit" class="btn btn-primary">Submit comment</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

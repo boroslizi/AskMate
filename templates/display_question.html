@@ -9,42 +9,47 @@
 {% block body %}
 <h1>Question</h1>
 <h3>{{ question['title'] }}</h3>
-<div class="buttons">
-<form action="{{ url_for("question_vote_up", question_id=question['id']) }}" method="post">
-    <button type="submit">Vote up</button>
-</form>
-<form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
-    <button type="submit">Vote down</button>
-</form>
-<form action="{{ url_for("add_new_answer", question_id=question['id']) }}">
-    <button type="submit">Add new answer</button>
-</form>
-<form action="{{ url_for("add_comment_to_question", question_id=question['id']) }}">
-    <button type="submit">Add comment</button>
-</form>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <form action="{{ url_for("add_new_answer", question_id=question['id']) }}">
+        <button type="submit" class="btn btn-secondary">Add new answer</button>
+    </form>
+    <form action="{{ url_for("add_comment_to_question", question_id=question['id']) }}">
+        <button type="submit" class="btn btn-secondary">Add comment</button>
+    </form>
+    <form action="{{ url_for("question_vote_up", question_id=question['id']) }}" method="post">
+        <button type="submit" class="btn btn-secondary">Vote up</button>
+    </form>
+    <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
+        <button type="submit" class="btn btn-secondary">Vote down</button>
+    </form>
 </div>
-    <table>
+</div>
+    <table class="table table-hover table-dark">
+        <thead>
         <tr>
-            <th>ID</th>
-            <th>Submission time</th>
-            <th>View number</th>
-            <th>Vote number</th>
-            <th>Message</th>
-            <th>Image</th>
+            <th scope="col">ID</th>
+            <th scope="col">Submission time</th>
+            <th scope="col">View number</th>
+            <th scope="col">Vote number</th>
+            <th scope="col">Message</th>
+            <th scope="col">Image</th>
         </tr>
-        <tr>
-            <td>{{ question['id'] }}</td>
-            <td>{{ question['submission_time'] }}</td>
-            <td>{{ question['view_number'] }}</td>
-            <td>{{ question['vote_number'] }}</td>
-            <td>{{ question['message'] }}</td>
-            <td>{{ question['image'] }}</td>
-        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ question['id'] }}</td>
+                <td>{{ question['submission_time'] }}</td>
+                <td>{{ question['view_number'] }}</td>
+                <td>{{ question['vote_number'] }}</td>
+                <td>{{ question['message'] }}</td>
+                <td>{{ question['image'] }}</td>
+            </tr>
+        </tbody>
     </table>
 {% if (comments is defined) and comments %}
 <br>
 <h3>Comments</h3>
-    <table>
+    <table class="table table-hover table-dark">
         <tr>
             <th>ID</th>
             <th>Comment</th>
@@ -70,7 +75,7 @@
 {% if (answers is defined) and answers %}
 <br>
 <h3>Answers</h3>
-    <table>
+    <table class="table table-hover table-dark">
         <tr>
             <th>ID</th>
             <th>Answer</th>
@@ -101,10 +106,10 @@
                 {% endif %}
                 <td>{{ answer['submission_time'] }}</td>
                 <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
-                    <button type="submit">Vote up</button>
+                    <button type="submit" class="btn btn-light">Vote up</button>
                     </form>
                     <form action="{{ url_for("answer_vote_down", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
-                    <button type="submit">Vote down</button>
+                    <button type="submit" class="btn btn-light">Vote down</button>
                     </form>
                 </td>
                 <td>{{ answer['vote_number'] }}</td>

@@ -3,12 +3,26 @@
 {% block body %}
 <h1>New Question</h1>
 <form action="{{ url_for('add_question') }}" method="post">
-    <p><label for="question">Your question:</label><br>
-    <input id="question" name="question"></p>
-    <p><label for="message">Message:</label><br>
-    <textarea id="message" name="message" rows="4" cols="40"></textarea></p>
-    <p><label for="image">Image URL:</label><br>
-    <input id="image" name="image"></p>
-    <button type="submit">Submit my question</button>
+  <div class="form-group">
+      <div class="form-group col-md-4">
+        <label for="question">Your question:</label>
+        <input class="form-control" id="question" name="question" placeholder="Your question">
+      </div>
+  </div>
+  <div class="form-group">
+      <div class="form-group col-md-4">
+        <label for="message">Message:</label>
+        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Write your message"></textarea>
+      </div>
+  </div>
+  <div class="form-group">
+      <div class="form-group col-md-4">
+        <p><label for="image">Image URL:</label><br>
+        <input class="form-control" id="question" name="image" placeholder="Image">
+      </div>
+  </div>
+    <div class="form-group col-md-4">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
 </form>
 {% endblock %}
