@@ -41,8 +41,8 @@ def get_all_answer_headers(cursor):
 
 @connection.connection_handler
 def write_to_questions(cursor, data):
-    cursor.execute("""INSERT INTO question VALUES (%(id)s, %(submission_time)s, %(view_number)s, 
-                    %(vote_number)s, %(title)s, %(message)s, %(image)s);""",
+    cursor.execute("""INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, 
+                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);""",
                    {'id_value': data['id'],
                     'submission_time_value': data['submission_time'],
                     'view_number_value': data['view_number'],
