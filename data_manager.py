@@ -66,10 +66,10 @@ def write_to_answers(cursor, data):
 
 @connection.connection_handler
 def write_to_comments(cursor, data):
-    cursor.execute("""INSERT INTO comment VALUES (%(id_value)s, %(question_id_value)s, %(answer_id_value)s, 
+    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count) 
+                    VALUES (%(question_id_value)s, %(answer_id_value)s, 
                     %(message_value)s, %(submission_time_value)s, %(edited_count_value)s);""",
-                   {'id_value': get_next_comment_id(),
-                    'question_id_value': data['question_id'] if data['type'] == 'question' else None,
+                   {'question_id_value': data['question_id'] if data['type'] == 'question' else None,
                     'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
                     'message_value': data['message'],
                     'submission_time_value': datetime.now().replace(microsecond=0),
