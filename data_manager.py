@@ -54,10 +54,10 @@ def write_to_questions(cursor, data):
 
 @connection.connection_handler
 def write_to_answers(cursor, data):
-    cursor.execute("""INSERT INTO answer VALUES (%(id_value)s, %(submission_time_value)s, %(vote_number_value)s, 
+    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+                    VALUES (%(submission_time_value)s, %(vote_number_value)s, 
                     %(question_id_value)s, %(message_value)s, %(image_value)s);""",
-                   {'id_value': data['id'],
-                    'submission_time_value': data['submission_time'],
+                   {'submission_time_value': data['submission_time'],
                     'vote_number_value': data['vote_number'],
                     'question_id_value': data['question_id'],
                     'message_value': data['message'],
