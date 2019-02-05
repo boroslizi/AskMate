@@ -210,9 +210,12 @@ def delete_question_by_id(cursor, question_id):
     cursor.execute("""DELETE FROM comment
                       WHERE question_id=%(id)s;""",
                    {'id': question_id})
-    cursor.execute("""DELETE FROM answer
+    cursor.execute("""SELECT id FROM answer
                       WHERE question_id=%(id)s;""",
                    {'id': question_id})
+    answer_ids = cursor.fetchall()
+    for answer_id in answer_ids:
+        delete_answer_by_id(answer_id['id'])
     cursor.execute("""DELETE FROM question
                       WHERE id=%(id)s;""",
                    {'id': question_id})
