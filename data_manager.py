@@ -85,36 +85,6 @@ def sort_questions_by_time(cursor):
 
 
 @connection.connection_handler
-def get_next_question_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from question;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
-
-
-@connection.connection_handler
-def get_next_answer_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from answer;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
-
-
-@connection.connection_handler
-def get_next_comment_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from comment;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
-
-
-@connection.connection_handler
 def get_question_by_id(cursor, question_id):
     cursor.execute("""SELECT * FROM question
                       WHERE id=%(id)s;""",
