@@ -65,13 +65,14 @@ def add_question():
     if request.method == "GET":
         return render_template('new_question.html')
 
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     new_question_all_data = data_manager.add_new_question()
     new_question_all_data.update(
         {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
             'image': request.form.get('image'),
-            'user_id': session['user_id']
+            'user_id': user_id
         }
     )
     data_manager.write_to_questions(new_question_all_data)
@@ -100,11 +101,12 @@ def add_comment_to_question(question_id):
         question = data_manager.get_question_by_id(question_id)
         return render_template('add_comment_to_question.html', question=question)
 
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     new_comment_to_question = {
         'message': request.form.get('comment'),
         'type': 'question',
         'question_id': question_id,
-        'user_id': session['user_id']
+        'user_id': user_id
         }
     data_manager.write_to_comments(new_comment_to_question)
     global latest_opened_question_id
@@ -123,7 +125,7 @@ def add_new_answer(question_id):
         return render_template("new_answer.html", question_id=question_id)
 
     new_answer = request.form["new_answer"]
-    user_id = session['user_id']
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     data_manager.add_new_answer(new_answer, user_id, question_id)
     return redirect(url_for("display_question", question_id=question_id))
 

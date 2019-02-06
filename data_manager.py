@@ -309,3 +309,11 @@ def get_latest_questions(cursor, count):
                    {'count': count})
     latest_questions = cursor.fetchall()
     return latest_questions
+
+
+@connection.connection_handler
+def get_user_id_by_user_name(cursor, user_name):
+    cursor.execute("""SELECT id FROM users WHERE user_name=%(user_name_value)s;""",
+                   {'user_name_value': user_name})
+    user_id = cursor.fetchall()[0]['id']
+    return user_id
