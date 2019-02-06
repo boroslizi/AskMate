@@ -60,7 +60,7 @@ def write_to_questions(cursor, data):
                     'title_value': data['title'],
                     'message_value': data['message'],
                     'image_value': data['image'],
-                    'user_id-value': data['user_id']})
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
