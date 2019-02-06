@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import data_manager
 
 app = Flask(__name__)
@@ -189,5 +189,20 @@ def delete_comment(comment_id):
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
 
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == "GET":
+        return render_template('registration.html')
+    elif request.method == "POST":
+        new_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+        session['user_name'] = new_user['user_name']
+        data_manager.add_new_user(new_user)
+        return redirect(url_for('registration'))
+
+
 if __name__ == "__main__":
+    app.secret_key = '5stars'
     app.run(debug=True, port=7000)
