@@ -208,6 +208,12 @@ def registration():
         return redirect(url_for('registration'))
 
 
+@app.route('/question/<question_id>/accept', methods=['POST'])
+def accept_answer(question_id):
+    # TODO: data_manager new column change from NULL to accepted
+    return redirect(url_for('display_question', question_id=question_id))
+
+
 if __name__ == "__main__":
     app.secret_key = '5stars'
     app.run(debug=True, port=7000)
