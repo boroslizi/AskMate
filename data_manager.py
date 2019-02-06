@@ -334,3 +334,19 @@ def add_new_user(cursor, new_user):
                        'reg_date': datetime.now().replace(microsecond=0)
                    })
 
+
+@connection.connection_handler
+def mark_question_as_accepted(cursor, question_id):
+    cursor.execute("""UPDATE question
+                        SET accepted = TRUE
+                            WHERE id=%(id)s;""",
+                   {'id': question_id})
+
+
+@connection.connection_handler
+def is_question_accepted(cursor, question_id):
+    cursor.execute("""SELECT accepted FROM question
+                      WHERE id=%(id);""",
+                   {'id': question_id})
+    accepted = cursor.fetchall()[0]['accepted']
+    return accepted

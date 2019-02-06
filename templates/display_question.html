@@ -22,6 +22,9 @@
     <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
         <button type="submit" class="btn btn-secondary">Vote down</button>
     </form>
+    <form action="{{ url_for('accept_answer', question_id=question['id']) }}" method="post">
+        <button type="submit" class="btn btn-secondary">Mark as accepted</button>
+    </form>
 </div>
 </div>
     <table class="table table-hover table-dark">
@@ -42,13 +45,7 @@
                 <td>{{ question['submission_time'] }}</td>
                 <td>{{ question['view_number'] }}</td>
                 <td>{{ question['vote_number'] }}</td>
-                {% if accepted is defined %}
-                    <td>Accepted</td>
-                {% else %}
-                    <td><form action="{{ url_for('accept_answer', question_id=question['id']) }}" method="post">
-                        <button type="submit" class="btn btn-secondary">Mark as accepted</button>
-                        </form></td>
-                {% endif %}
+                <td>{{ question['accepted'] }}</td>
                 <td>{{ question['message'] }}</td>
                 <td>{{ question['image'] }}</td>
             </tr>
