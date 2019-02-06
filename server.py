@@ -193,6 +193,35 @@ def delete_comment(comment_id):
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
+@app.route('/user/<user_id>')
+def display_all_user_activities(user_id):
+    question_activities = question_id
+    answer_activities = data_manager.get_question_by_id(question_id)
+    comment_activities = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
+    return render_template('user_page.html', user=user_id)
+
+
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == "GET":
+        return render_template('registration.html')
+    elif request.method == "POST":
+        new_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+        session['user_name'] = new_user['user_name']
+        data_manager.add_new_user(new_user)
+        return redirect(url_for('registration'))
+
+
+@app.route('/users')
+def route_users():
+    user_data = data_manager.get_all_user_data()
+    return render_template('users.html', user_data=user_data)
+
 @app.route('/user/<user>')
 def display_all_user_activities(user):
     user_id = data_manager.get_user_id_by_user_name(user)

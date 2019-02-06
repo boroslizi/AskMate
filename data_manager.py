@@ -358,6 +358,53 @@ def get_user_by_id(cursor, user_id):
     user_id = cursor.fetchall()
     return user_id
 
+
+@connection.connection_handler
+def get_user_id_by_user_name(cursor, user_name):
+    cursor.execute("""SELECT id FROM users WHERE user_name=%(user_name_value)s;""",
+                   {'user_name_value': user_name})
+    user_id = cursor.fetchall()[0]['id']
+    return user_id
+
+
+@connection.connection_handler
+def add_new_user(cursor, new_user):
+    salt = util.generate_salt()
+    cursor.execute("""
+                    INSERT INTO users (user_name, salt, hashed_password, reg_date)
+                    VALUES (%(user_name)s, %(salt)s, %(hashed_password)s, %(reg_date)s) ;
+                    """,
+                   {
+                       'user_name': new_user['user_name'],
+                       'salt': salt,
+                       'hashed_password': util.hash_password(new_user['password'], salt),
+                       'reg_date': datetime.now().replace(microsecond=0)
+                   })
+
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute("""SELECT id, user_name, reg_date FROM users;
+                    """)
+    user_data = cursor.fetchall()
+    return user_data
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    cursor.execute("""SELECT id FROM users
+                      WHERE  id = %(id)s;""",
+                   {'id': user_id})
+    user_id = cursor.fetchall()
+    return user_id
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    cursor.execute("""SELECT id FROM users
+                      WHERE  id = %(id)s;""",
+                   {'id': user_id})
+    user_id = cursor.fetchall()
+    return user_id
+
 @connection.connection_handler
 def get_all_questions_by_id(cursor, user_id):
     cursor.execute("""SELECT title FROM question
