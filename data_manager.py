@@ -305,3 +305,11 @@ def get_latest_questions(cursor, count):
                    {'count': count})
     latest_questions = cursor.fetchall()
     return latest_questions
+
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute("""SELECT id, user_name, reg_date FROM users;
+                    """)
+    user_data = cursor.fetchall()
+    return user_data
