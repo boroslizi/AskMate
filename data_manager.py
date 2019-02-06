@@ -344,15 +344,6 @@ def mark_question_as_accepted(cursor, question_id):
 
 
 @connection.connection_handler
-def is_question_accepted(cursor, question_id):
-    cursor.execute("""SELECT accepted FROM question
-                      WHERE id=%(id);""",
-                   {'id': question_id})
-    accepted = cursor.fetchall()[0]['accepted']
-    return accepted
-
-
-@connection.connection_handler
 def get_all_user_data(cursor):
     cursor.execute("""SELECT id, user_name, reg_date FROM users;
                     """)
