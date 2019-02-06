@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -187,6 +188,19 @@ def delete_comment(comment_id):
     data_manager.delete_comment_by_id(comment_id)
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == "GET":
+        return render_template('registration.html')
+    elif request.method == "POST":
+        new_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+        data_manager.add_new_user(new_user)
+        return redirect(url_for('registration'))
 
 
 if __name__ == "__main__":
