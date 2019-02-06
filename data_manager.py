@@ -50,15 +50,16 @@ def get_new_question_id_by_title(cursor, title):
 
 @connection.connection_handler
 def write_to_questions(cursor, data):
-    cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+    cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
                     VALUES (%(submission_time_value)s, %(view_number_value)s, 
-                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);""",
+                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s, %(user_id_value)s);""",
                    {'submission_time_value': data['submission_time'],
                     'view_number_value': data['view_number'],
                     'vote_number_value': data['vote_number'],
                     'title_value': data['title'],
                     'message_value': data['message'],
-                    'image_value': data['image']})
+                    'image_value': data['image'],
+                    'user_id-value': data['user_id']})
 
 
 @connection.connection_handler

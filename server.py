@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import data_manager
 
 app = Flask(__name__)
@@ -70,7 +70,8 @@ def add_question():
         {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
-            'image': request.form.get('image')
+            'image': request.form.get('image'),
+            'user_id': session['user_id']
         }
     )
     data_manager.write_to_questions(new_question_all_data)
