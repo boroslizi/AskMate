@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+    {% if not session['user_name'] %}
     <form action="{{ url_for('registration') }}" method="post">
         <p>
             Username <br>
@@ -18,7 +19,9 @@
             <button type="submit">Registration</button>
         </p>
     </form>
-
+    {% elif session['user_name'] %}
+        <p>The registration has been successful</p>
+    {% endif %}
 
 
     <a href="{{ url_for('index') }}">Back to the main menu</a>
