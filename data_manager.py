@@ -1,5 +1,6 @@
 from datetime import datetime
 import connection
+import util
 
 
 @connection.connection_handler
@@ -305,3 +306,19 @@ def get_latest_questions(cursor, count):
                    {'count': count})
     latest_questions = cursor.fetchall()
     return latest_questions
+
+
+@connection.connection_handler
+def add_new_user(cursor, new_user):
+    salt = util.generate_salt()
+    cursor.execute("""
+                    INSERT INTO users (user_name, salt, hashed_password, reg_date)
+                    VALUES (%(user_name)s, %(salt)s, %(hashed_password)s, %(reg_date)s) ;
+                    """,
+                   {
+                       'user_name': new_user['user_name'],
+                       'salt': salt,
+                       'hashed_password': util.hash_password(new_user['password'], salt),
+                       'reg_date': datetime.now().replace(microsecond=0)
+                   })
+
