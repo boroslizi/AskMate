@@ -214,6 +214,12 @@ def registration():
             return render_template('registration.html', is_in_the_db=is_in_the_db)
 
 
+@app.route('/question/<question_id>/accept', methods=['POST'])
+def accept_answer(question_id):
+    data_manager.mark_question_as_accepted(question_id)
+    return redirect(url_for('display_question', question_id=question_id))
+
+
 @app.route('/users')
 def route_users():
     user_data = data_manager.get_all_user_data()
