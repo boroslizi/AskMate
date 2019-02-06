@@ -305,3 +305,19 @@ def get_latest_questions(cursor, count):
                    {'count': count})
     latest_questions = cursor.fetchall()
     return latest_questions
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    cursor.execute("""SELECT id FROM users
+                      WHERE  id = %(id)s;""",
+                   {'id': user_id})
+    user_id = cursor.fetchall()
+    return user_id
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    cursor.execute("""SELECT id FROM users
+                      WHERE  id = %(id)s;""",
+                   {'id': user_id})
+    user_id = cursor.fetchall()
+    return user_id

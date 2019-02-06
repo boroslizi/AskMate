@@ -9,7 +9,8 @@ latest_opened_question_id = 0
 @app.route('/')
 def index():
     latest_questions = data_manager.get_latest_questions(5)
-    return render_template('index.html', questions=latest_questions)
+    user = data_manager.get_user_by_id(1)
+    return render_template('index.html', questions=latest_questions, user=user)
 
 
 @app.route('/list')
@@ -187,6 +188,15 @@ def delete_comment(comment_id):
     data_manager.delete_comment_by_id(comment_id)
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
+
+@app.route('/user/<user_id>')
+def display_all_user_activities(user_id):
+    question_activities = question_id
+    answer_activities = data_manager.get_question_by_id(question_id)
+    comment_activities = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
+    return render_template('user_page.html', user=user_id)
+
+
 
 
 if __name__ == "__main__":
