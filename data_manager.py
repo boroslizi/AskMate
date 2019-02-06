@@ -64,14 +64,15 @@ def write_to_questions(cursor, data):
 
 @connection.connection_handler
 def write_to_answers(cursor, data):
-    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id) 
                     VALUES (%(submission_time_value)s, %(vote_number_value)s, 
-                    %(question_id_value)s, %(message_value)s, %(image_value)s);""",
+                    %(question_id_value)s, %(message_value)s, %(image_value)s, %(user_id_value)s);""",
                    {'submission_time_value': data['submission_time'],
                     'vote_number_value': data['vote_number'],
                     'question_id_value': data['question_id'],
                     'message_value': data['message'],
-                    'image_value': data['image']})
+                    'image_value': data['image'],
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
@@ -227,13 +228,14 @@ def add_new_question():
     return new_question_data
 
 
-def add_new_answer(new_answer, question_id):
+def add_new_answer(new_answer, user_id, question_id):
     new_data = {
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": "0",
         "question_id": question_id,
         "message": new_answer,
-        "image": ""
+        "image": "",
+        "user_id": user_id
     }
     write_to_answers(new_data)
 

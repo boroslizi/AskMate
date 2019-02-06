@@ -122,7 +122,8 @@ def add_new_answer(question_id):
         return render_template("new_answer.html", question_id=question_id)
 
     new_answer = request.form["new_answer"]
-    data_manager.add_new_answer(new_answer, question_id)
+    user_id = session['user_id']
+    data_manager.add_new_answer(new_answer, user_id, question_id)
     return redirect(url_for("display_question", question_id=question_id))
 
 
