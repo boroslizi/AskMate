@@ -103,7 +103,8 @@ def add_comment_to_question(question_id):
     new_comment_to_question = {
         'message': request.form.get('comment'),
         'type': 'question',
-        'question_id': question_id
+        'question_id': question_id,
+        'user_id': session['user_id']
         }
     data_manager.write_to_comments(new_comment_to_question)
     global latest_opened_question_id

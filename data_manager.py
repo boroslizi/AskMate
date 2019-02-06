@@ -77,14 +77,15 @@ def write_to_answers(cursor, data):
 
 @connection.connection_handler
 def write_to_comments(cursor, data):
-    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count) 
+    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id) 
                     VALUES (%(question_id_value)s, %(answer_id_value)s, 
-                    %(message_value)s, %(submission_time_value)s, %(edited_count_value)s);""",
+                    %(message_value)s, %(submission_time_value)s, %(edited_count_value)s, %(user_id_value)s);""",
                    {'question_id_value': data['question_id'] if data['type'] == 'question' else None,
                     'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
                     'message_value': data['message'],
                     'submission_time_value': datetime.now().replace(microsecond=0),
-                    'edited_count_value': None})
+                    'edited_count_value': None,
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
