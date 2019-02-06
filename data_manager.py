@@ -334,3 +334,10 @@ def add_new_user(cursor, new_user):
                        'reg_date': datetime.now().replace(microsecond=0)
                    })
 
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute("""SELECT id, user_name, reg_date FROM users;
+                    """)
+    user_data = cursor.fetchall()
+    return user_data

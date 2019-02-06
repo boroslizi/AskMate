@@ -208,6 +208,12 @@ def registration():
         return redirect(url_for('registration'))
 
 
+@app.route('/users')
+def route_users():
+    user_data = data_manager.get_all_user_data()
+    return render_template('users.html', user_data=user_data)
+
+
 if __name__ == "__main__":
     app.secret_key = '5stars'
     app.run(debug=True, port=7000)
