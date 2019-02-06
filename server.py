@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import data_manager
 
 app = Flask(__name__)
@@ -65,12 +65,14 @@ def add_question():
     if request.method == "GET":
         return render_template('new_question.html')
 
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     new_question_all_data = data_manager.add_new_question()
     new_question_all_data.update(
         {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
-            'image': request.form.get('image')
+            'image': request.form.get('image'),
+            'user_id': user_id
         }
     )
     data_manager.write_to_questions(new_question_all_data)
@@ -99,10 +101,12 @@ def add_comment_to_question(question_id):
         question = data_manager.get_question_by_id(question_id)
         return render_template('add_comment_to_question.html', question=question)
 
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     new_comment_to_question = {
         'message': request.form.get('comment'),
         'type': 'question',
-        'question_id': question_id
+        'question_id': question_id,
+        'user_id': user_id
         }
     data_manager.write_to_comments(new_comment_to_question)
     global latest_opened_question_id
@@ -121,7 +125,8 @@ def add_new_answer(question_id):
         return render_template("new_answer.html", question_id=question_id)
 
     new_answer = request.form["new_answer"]
-    data_manager.add_new_answer(new_answer, question_id)
+    user_id = data_manager.get_user_id_by_user_name(session['user_name'])
+    data_manager.add_new_answer(new_answer, user_id, question_id)
     return redirect(url_for("display_question", question_id=question_id))
 
 
@@ -188,6 +193,35 @@ def delete_comment(comment_id):
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
+@app.route('/user/<user>')
+def display_all_user_activities(user):
+    user_id = data_manager.get_user_id_by_user_name(user)
+    question_activities = data_manager.get_all_questions(user_id)
+    return render_template('user_page.html', question_activities=question_activities)
+
+
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == "GET":
+        return render_template('registration.html')
+    elif request.method == "POST":
+        new_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+        session['user_name'] = new_user['user_name']
+        data_manager.add_new_user(new_user)
+        return redirect(url_for('registration'))
+
+
+@app.route('/users')
+def route_users():
+    user_data = data_manager.get_all_user_data()
+    return render_template('users.html', user_data=user_data)
+
 
 if __name__ == "__main__":
+    app.secret_key = '5stars'
     app.run(debug=True, port=7000)
