@@ -74,7 +74,8 @@ def add_question():
         }
     )
     data_manager.write_to_questions(new_question_all_data)
-    return redirect(url_for('display_question', question_id=new_question_all_data['id']))
+    question_id = data_manager.get_new_question_id_by_title(new_question_all_data['title'])
+    return redirect(url_for('display_question', question_id=question_id))
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

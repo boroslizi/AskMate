@@ -40,11 +40,20 @@ def get_all_answer_headers(cursor):
 
 
 @connection.connection_handler
+def get_new_question_id_by_title(cursor, title):
+    cursor.execute("""SELECT id FROM question
+                      WHERE title=%(title_value)s;""",
+                   {'title_value': title})
+    question_id = cursor.fetchall()[0]['id']
+    return question_id
+
+
+@connection.connection_handler
 def write_to_questions(cursor, data):
-    cursor.execute("""INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, 
+    cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (%(submission_time_value)s, %(view_number_value)s, 
                     %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);""",
-                   {'id_value': data['id'],
-                    'submission_time_value': data['submission_time'],
+                   {'submission_time_value': data['submission_time'],
                     'view_number_value': data['view_number'],
                     'vote_number_value': data['vote_number'],
                     'title_value': data['title'],
@@ -54,10 +63,10 @@ def write_to_questions(cursor, data):
 
 @connection.connection_handler
 def write_to_answers(cursor, data):
-    cursor.execute("""INSERT INTO answer VALUES (%(id_value)s, %(submission_time_value)s, %(vote_number_value)s, 
+    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+                    VALUES (%(submission_time_value)s, %(vote_number_value)s, 
                     %(question_id_value)s, %(message_value)s, %(image_value)s);""",
-                   {'id_value': data['id'],
-                    'submission_time_value': data['submission_time'],
+                   {'submission_time_value': data['submission_time'],
                     'vote_number_value': data['vote_number'],
                     'question_id_value': data['question_id'],
                     'message_value': data['message'],
@@ -66,10 +75,10 @@ def write_to_answers(cursor, data):
 
 @connection.connection_handler
 def write_to_comments(cursor, data):
-    cursor.execute("""INSERT INTO comment VALUES (%(id_value)s, %(question_id_value)s, %(answer_id_value)s, 
+    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count) 
+                    VALUES (%(question_id_value)s, %(answer_id_value)s, 
                     %(message_value)s, %(submission_time_value)s, %(edited_count_value)s);""",
-                   {'id_value': get_next_comment_id(),
-                    'question_id_value': data['question_id'] if data['type'] == 'question' else None,
+                   {'question_id_value': data['question_id'] if data['type'] == 'question' else None,
                     'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
                     'message_value': data['message'],
                     'submission_time_value': datetime.now().replace(microsecond=0),
@@ -82,36 +91,6 @@ def sort_questions_by_time(cursor):
                       ORDER BY submission_time DESC;""")
     sorted_questions = cursor.fetchall()
     return sorted_questions
-
-
-@connection.connection_handler
-def get_next_question_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from question;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
-
-
-@connection.connection_handler
-def get_next_answer_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from answer;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
-
-
-@connection.connection_handler
-def get_next_comment_id(cursor):
-    try:
-        cursor.execute("""SELECT MAX(id) from comment;""")
-        new_id = cursor.fetchall()[0]['max'] + 1
-    except KeyError:
-        new_id = 0
-    return new_id
 
 
 @connection.connection_handler
@@ -210,9 +189,12 @@ def delete_question_by_id(cursor, question_id):
     cursor.execute("""DELETE FROM comment
                       WHERE question_id=%(id)s;""",
                    {'id': question_id})
-    cursor.execute("""DELETE FROM answer
+    cursor.execute("""SELECT id FROM answer
                       WHERE question_id=%(id)s;""",
                    {'id': question_id})
+    answer_ids = cursor.fetchall()
+    for answer_id in answer_ids:
+        delete_answer_by_id(answer_id['id'])
     cursor.execute("""DELETE FROM question
                       WHERE id=%(id)s;""",
                    {'id': question_id})
@@ -237,7 +219,6 @@ def delete_comment_by_id(cursor, comment_id):
 
 def add_new_question():
     new_question_data = {
-        'id': get_next_question_id(),
         'submission_time': datetime.now().replace(microsecond=0),
         'view_number': 0,
         'vote_number': 0
@@ -247,7 +228,6 @@ def add_new_question():
 
 def add_new_answer(new_answer, question_id):
     new_data = {
-        "id": get_next_answer_id(),
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": "0",
         "question_id": question_id,
