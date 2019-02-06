@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import data_manager
 import util
 
@@ -71,7 +71,8 @@ def add_question():
         {
             'title': request.form.get('question'),
             'message': request.form.get('message'),
-            'image': request.form.get('image')
+            'image': request.form.get('image'),
+            'user_id': session['user_id']
         }
     )
     data_manager.write_to_questions(new_question_all_data)
@@ -103,7 +104,8 @@ def add_comment_to_question(question_id):
     new_comment_to_question = {
         'message': request.form.get('comment'),
         'type': 'question',
-        'question_id': question_id
+        'question_id': question_id,
+        'user_id': session['user_id']
         }
     data_manager.write_to_comments(new_comment_to_question)
     global latest_opened_question_id
@@ -122,7 +124,8 @@ def add_new_answer(question_id):
         return render_template("new_answer.html", question_id=question_id)
 
     new_answer = request.form["new_answer"]
-    data_manager.add_new_answer(new_answer, question_id)
+    user_id = session['user_id']
+    data_manager.add_new_answer(new_answer, user_id, question_id)
     return redirect(url_for("display_question", question_id=question_id))
 
 
