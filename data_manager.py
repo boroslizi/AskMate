@@ -309,6 +309,15 @@ def get_latest_questions(cursor, count):
 
 
 @connection.connection_handler
+def user_name_verifying(cursor, user_name):
+    cursor.execute("""
+                    SELECT user_name FROM users
+                    WHERE user_name = %(user_name)s;
+                    """, {'user_name': user_name})
+    is_in_the_db = cursor.fetchall()
+    return is_in_the_db
+
+@connection.connection_handler
 def add_new_user(cursor, new_user):
     salt = util.generate_salt()
     cursor.execute("""
