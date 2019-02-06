@@ -208,6 +208,18 @@ def registration():
         return redirect(url_for('registration'))
 
 
+@app.route('/question/<question_id>/accept', methods=['POST'])
+def accept_answer(question_id):
+    data_manager.mark_question_as_accepted(question_id)
+    return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route('/users')
+def route_users():
+    user_data = data_manager.get_all_user_data()
+    return render_template('users.html', user_data=user_data)
+
+
 if __name__ == "__main__":
     app.secret_key = '5stars'
     app.run(debug=True, port=7000)

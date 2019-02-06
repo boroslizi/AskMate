@@ -60,7 +60,7 @@ def write_to_questions(cursor, data):
                     'title_value': data['title'],
                     'message_value': data['message'],
                     'image_value': data['image'],
-                    'user_id-value': data['user_id']})
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
@@ -334,3 +334,27 @@ def add_new_user(cursor, new_user):
                        'reg_date': datetime.now().replace(microsecond=0)
                    })
 
+
+@connection.connection_handler
+def mark_question_as_accepted(cursor, question_id):
+    cursor.execute("""UPDATE question
+                        SET accepted = TRUE
+                            WHERE id=%(id)s;""",
+                   {'id': question_id})
+
+
+@connection.connection_handler
+def is_question_accepted(cursor, question_id):
+    cursor.execute("""SELECT accepted FROM question
+                      WHERE id=%(id);""",
+                   {'id': question_id})
+    accepted = cursor.fetchall()[0]['accepted']
+    return accepted
+
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute("""SELECT id, user_name, reg_date FROM users;
+                    """)
+    user_data = cursor.fetchall()
+    return user_data

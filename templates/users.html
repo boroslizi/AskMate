@@ -1,0 +1,30 @@
+{%  extends "base.html" %}
+{% block title %}Welcome!{%  endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+          integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/'
+          crossorigin='anonymous'>
+{% endblock %}
+{% block body %}
+<h1>All users</h1>
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Registration Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in user_data %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.user_name }}</td>
+                <td>{{ data.reg_date }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for("index") }}">Home page</a>
+{% endblock %}

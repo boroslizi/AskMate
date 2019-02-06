@@ -27,6 +27,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('route_to_all_questions') }}">Show all questions</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('route_users') }}">All users</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method='post'>
             <input class="form-control mr-sm-2" type="text" id='search_phrase' placeholder="Search" name="search_phrase"
