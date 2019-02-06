@@ -51,39 +51,42 @@ def get_new_question_id_by_title(cursor, title):
 
 @connection.connection_handler
 def write_to_questions(cursor, data):
-    cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+    cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
                     VALUES (%(submission_time_value)s, %(view_number_value)s, 
-                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);""",
+                    %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s, %(user_id_value)s);""",
                    {'submission_time_value': data['submission_time'],
                     'view_number_value': data['view_number'],
                     'vote_number_value': data['vote_number'],
                     'title_value': data['title'],
                     'message_value': data['message'],
-                    'image_value': data['image']})
+                    'image_value': data['image'],
+                    'user_id-value': data['user_id']})
 
 
 @connection.connection_handler
 def write_to_answers(cursor, data):
-    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+    cursor.execute("""INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id) 
                     VALUES (%(submission_time_value)s, %(vote_number_value)s, 
-                    %(question_id_value)s, %(message_value)s, %(image_value)s);""",
+                    %(question_id_value)s, %(message_value)s, %(image_value)s, %(user_id_value)s);""",
                    {'submission_time_value': data['submission_time'],
                     'vote_number_value': data['vote_number'],
                     'question_id_value': data['question_id'],
                     'message_value': data['message'],
-                    'image_value': data['image']})
+                    'image_value': data['image'],
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
 def write_to_comments(cursor, data):
-    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count) 
+    cursor.execute("""INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id) 
                     VALUES (%(question_id_value)s, %(answer_id_value)s, 
-                    %(message_value)s, %(submission_time_value)s, %(edited_count_value)s);""",
+                    %(message_value)s, %(submission_time_value)s, %(edited_count_value)s, %(user_id_value)s);""",
                    {'question_id_value': data['question_id'] if data['type'] == 'question' else None,
                     'answer_id_value': data['answer_id'] if data['type'] == 'answer' else None,
                     'message_value': data['message'],
                     'submission_time_value': datetime.now().replace(microsecond=0),
-                    'edited_count_value': None})
+                    'edited_count_value': None,
+                    'user_id_value': data['user_id']})
 
 
 @connection.connection_handler
@@ -227,13 +230,14 @@ def add_new_question():
     return new_question_data
 
 
-def add_new_answer(new_answer, question_id):
+def add_new_answer(new_answer, user_id, question_id):
     new_data = {
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": "0",
         "question_id": question_id,
         "message": new_answer,
-        "image": ""
+        "image": "",
+        "user_id": user_id
     }
     write_to_answers(new_data)
 
@@ -306,6 +310,14 @@ def get_latest_questions(cursor, count):
                    {'count': count})
     latest_questions = cursor.fetchall()
     return latest_questions
+
+
+@connection.connection_handler
+def get_user_id_by_user_name(cursor, user_name):
+    cursor.execute("""SELECT id FROM users WHERE user_name=%(user_name_value)s;""",
+                   {'user_name_value': user_name})
+    user_id = cursor.fetchall()[0]['id']
+    return user_id
 
 
 @connection.connection_handler
