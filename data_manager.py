@@ -40,6 +40,15 @@ def get_all_answer_headers(cursor):
 
 
 @connection.connection_handler
+def get_new_question_id_by_title(cursor, title):
+    cursor.execute("""SELECT id FROM question
+                      WHERE title=%(title_value)s;""",
+                   {'title_value': title})
+    question_id = cursor.fetchall()[0]['id']
+    return question_id
+
+
+@connection.connection_handler
 def write_to_questions(cursor, data):
     cursor.execute("""INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
                     VALUES (%(submission_time_value)s, %(view_number_value)s, 
@@ -210,7 +219,6 @@ def delete_comment_by_id(cursor, comment_id):
 
 def add_new_question():
     new_question_data = {
-        'id': get_next_question_id(),
         'submission_time': datetime.now().replace(microsecond=0),
         'view_number': 0,
         'vote_number': 0
@@ -220,7 +228,6 @@ def add_new_question():
 
 def add_new_answer(new_answer, question_id):
     new_data = {
-        "id": get_next_answer_id(),
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": "0",
         "question_id": question_id,
