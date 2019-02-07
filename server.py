@@ -250,7 +250,9 @@ def display_all_user_activities(user):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
-        return render_template('login.html')
+        html = render_template('login.html')
+        session['log_status'] = 'initialized'
+        return html
     elif request.method == "POST":
         login_user = {
             'user_name': request.form.get('user_name'),
@@ -263,7 +265,8 @@ def login():
             session['log_status'] = 'logged'
             return redirect(url_for('login'))
         else:
-            return render_template('login.html', verification=verification)
+            session['log_status'] = 'wrong'
+            return render_template('login.html')
 
 
 
