@@ -249,14 +249,14 @@ def display_all_user_activities(user):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
-        return render_template('login.html')  #TODO
+        return render_template('login.html')
     elif request.method == "POST":
         login_user = {
             'user_name': request.form.get('user_name'),
             'password': request.form.get('password')
         }
 
-        return redirect(url_for('registration'))  #TODO
+        return redirect(url_for('registration'))
 
 
 
