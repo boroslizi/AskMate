@@ -342,13 +342,6 @@ def get_all_user_data(cursor):
     user_data = cursor.fetchall()
     return user_data
 
-@connection.connection_handler
-def get_user_by_id(cursor, user_id):
-    cursor.execute("""SELECT id FROM users
-                      WHERE  id = %(id)s;""",
-                   {'id': user_id})
-    user_id = cursor.fetchall()
-    return user_id
 
 @connection.connection_handler
 def get_user_by_id(cursor, user_id):
@@ -383,33 +376,25 @@ def add_new_user(cursor, new_user):
 
 
 @connection.connection_handler
-def get_all_user_data(cursor):
-    cursor.execute("""SELECT id, user_name, reg_date FROM users;
-                    """)
-    user_data = cursor.fetchall()
-    return user_data
-
-@connection.connection_handler
-def get_user_by_id(cursor, user_id):
-    cursor.execute("""SELECT id FROM users
-                      WHERE  id = %(id)s;""",
-                   {'id': user_id})
-    user_id = cursor.fetchall()
-    return user_id
-
-@connection.connection_handler
-def get_user_by_id(cursor, user_id):
-    cursor.execute("""SELECT id FROM users
-                      WHERE  id = %(id)s;""",
-                   {'id': user_id})
-    user_id = cursor.fetchall()
-    return user_id
-
-@connection.connection_handler
 def get_all_questions_by_id(cursor, user_id):
-    cursor.execute("""SELECT title FROM question
-                      WHERE user_id = %(user_id)s
-                      LIMIT %(count)s;""",
+    cursor.execute("""SELECT id, title FROM question
+                      WHERE user_id = %(user_id)s;""",
                    {'user_id': user_id})
     questions = cursor.fetchall()
     return questions
+
+@connection.connection_handler
+def get_all_answers_by_id(cursor, user_id):
+    cursor.execute("""SELECT question_id, message FROM answer
+                      WHERE user_id = %(user_id)s;""",
+                   {'user_id': user_id})
+    answers = cursor.fetchall()
+    return answers
+
+@connection.connection_handler
+def get_all_comments_by_id(cursor, user_id):
+    cursor.execute("""SELECT question_id, message FROM comment
+                      WHERE user_id = %(user_id)s;""",
+                   {'user_id': user_id})
+    comments = cursor.fetchall()
+    return comments
