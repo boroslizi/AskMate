@@ -202,8 +202,9 @@ def delete_comment(comment_id):
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == "GET":
+        html = render_template('registration.html')
         session['reg_status'] = "not registered"
-        return render_template('registration.html')
+        return html
     elif request.method == "POST":
         new_user = {
             'user_name': request.form.get('user_name'),
@@ -214,7 +215,7 @@ def registration():
             session['user_name'] = new_user['user_name']
             session['reg_status'] = "registered"
             data_manager.add_new_user(new_user)
-            return render_template('registration.html')
+            return redirect('registration')
         else:
             return render_template('registration.html', is_in_the_db=is_in_the_db)
 

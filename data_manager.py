@@ -332,15 +332,13 @@ def user_name_verifying(cursor, user_name):
 
 @connection.connection_handler
 def add_new_user(cursor, new_user):
-    salt = util.generate_salt()
     cursor.execute("""
-                    INSERT INTO users (user_name, salt, hashed_password, reg_date)
-                    VALUES (%(user_name)s, %(salt)s, %(hashed_password)s, %(reg_date)s) ;
+                    INSERT INTO users (user_name, hashed_password, reg_date)
+                    VALUES (%(user_name)s, %(hashed_password)s, %(reg_date)s) ;
                     """,
                    {
                        'user_name': new_user['user_name'],
-                       'salt': salt,
-                       'hashed_password': util.hash_password(new_user['password'], salt),
+                       'hashed_password': util.hash_password(new_user['password']),
                        'reg_date': datetime.now().replace(microsecond=0)
                    })
 
@@ -377,20 +375,6 @@ def get_user_id_by_user_name(cursor, user_name):
     user_id = cursor.fetchall()[0]['id']
     return user_id
 
-
-@connection.connection_handler
-def add_new_user(cursor, new_user):
-    salt = util.generate_salt()
-    cursor.execute("""
-                    INSERT INTO users (user_name, salt, hashed_password, reg_date)
-                    VALUES (%(user_name)s, %(salt)s, %(hashed_password)s, %(reg_date)s) ;
-                    """,
-                   {
-                       'user_name': new_user['user_name'],
-                       'salt': salt,
-                       'hashed_password': util.hash_password(new_user['password'], salt),
-                       'reg_date': datetime.now().replace(microsecond=0)
-                   })
 
 
 @connection.connection_handler

@@ -66,7 +66,6 @@ CREATE TABLE users
 		constraint users_pk
 			primary key,
 	user_name varchar(100) NOT NULL,
-	salt varchar(128) NOT NULL,
 	hashed_password text NOT NULL,
 	reg_date timestamp NOT NULL
 );
@@ -130,11 +129,11 @@ INSERT INTO comment VALUES (1, 0, NULL, 'Please clarify the question as it is to
 INSERT INTO comment VALUES (2, NULL, 1, 'I think you could use my_list = list() as well.', '2017-05-02 16:55:00');
 SELECT pg_catalog.setval('comment_id_seq', 2, true);
 
-INSERT INTO "public"."users" ("id", "user_name", "salt", "hashed_password", "reg_date")
-VALUES (0, 'John McClain', 'b''$2b$12$JqB2dSEoJMBxchKv/hwTyu''', 'b''$2b$12$IsTvK4Typtc8bURN7opczODUoLubN5z9mY6rSmne8TKYbqUGp7H0S''', '2019-02-06 09:32:47.657000')
+INSERT INTO "public"."users" ("id", "user_name", "hashed_password", "reg_date")
+VALUES (0, 'John McClain', 'b''$2b$12$IsTvK4Typtc8bURN7opczODUoLubN5z9mY6rSmne8TKYbqUGp7H0S''', '2019-02-06 09:32:47.657000')
 
 ALTER TABLE question
-	DROP TABLE COLUMN IF EXISTS accepted;
+	DROP COLUMN IF EXISTS accepted;
 
 ALTER TABLE answer
   ADD accepted BOOLEAN DEFAULT FALSE;
