@@ -346,11 +346,11 @@ def add_new_user(cursor, new_user):
 
 
 @connection.connection_handler
-def mark_question_as_accepted(cursor, question_id):
-    cursor.execute("""UPDATE question
+def mark_answer_as_accepted(cursor, answer_id):
+    cursor.execute("""UPDATE answer
                         SET accepted = TRUE
                             WHERE id=%(id)s;""",
-                   {'id': question_id})
+                   {'id': answer_id})
 
 
 @connection.connection_handler
