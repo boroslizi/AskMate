@@ -22,11 +22,6 @@
     <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
         <button type="submit" class="btn btn-secondary">Vote down</button>
     </form>
-    {% if question['accepted'] is sameas False %}
-        <form action="{{ url_for('accept_answer', question_id=question['id']) }}" method="post">
-            <button type="submit" class="btn btn-secondary">Mark as accepted</button>
-        </form>
-    {% endif %}
 </div>
 </div>
     <table class="table table-hover table-dark">
@@ -36,7 +31,6 @@
             <th scope="col">Submission time</th>
             <th scope="col">View number</th>
             <th scope="col">Vote number</th>
-            <th scope="col">Accepted</th>
             <th scope="col">Message</th>
             <th scope="col">Image</th>
         </tr>
@@ -47,7 +41,6 @@
                 <td>{{ question['submission_time'] }}</td>
                 <td>{{ question['view_number'] }}</td>
                 <td>{{ question['vote_number'] }}</td>
-                <td>{{ 'Yes' if question['accepted'] is sameas True else 'Not yet' }}</td>
                 <td>{{ question['message'] }}</td>
                 <td>{{ question['image'] }}</td>
             </tr>
@@ -90,6 +83,7 @@
                 <th>Comments</th>
             {% endif %}
             <th>Submission time</th>
+            <th>Accepted</th>
             <th>Vote buttons</th>
             <th>Votes</th>
             <th>Add comment</th>
@@ -112,6 +106,7 @@
                 </td>
                 {% endif %}
                 <td>{{ answer['submission_time'] }}</td>
+                <td>{{ 'Yes' if question['accepted'] is sameas True else 'Not yet' }}</td>
                 <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
                     <button type="submit" class="btn btn-light">Vote up</button>
                     </form>
@@ -123,6 +118,11 @@
                 <td><a href="{{ url_for('add_comment_to_answer', answer_id = answer['id'], question_id=question['id']) }}">Add</a></td>
                 <td><a href="{{ url_for('edit_answer', answer_id=answer['id']) }}">Modify</a></td>
                 <td id="bin"><a href="{{ url_for('delete_answer', answer_id=answer['id']) }}"><i class='far fa-trash-alt' style='font-size:16px'></i></a></td>
+{#                {% if question['accepted'] is sameas False %}#}
+{#                <td><form action="{{ url_for('accept_answer', question_id=question['id']) }}" method="post">#}
+{#                    <button type="submit" class="btn btn-secondary">Mark as accepted</button>#}
+{#                </form></td>#}
+{#                {% endif %}#}
             </tr>
         {% endfor %}
     </table>
@@ -130,3 +130,7 @@
 <br>
 <a href="{{ url_for("index") }}">Home page</a>
 {% endblock %}
+
+
+
+
