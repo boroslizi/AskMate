@@ -409,6 +409,6 @@ def get_stored_hash(cursor, login_user):
                     WHERE user_name=%(user_name)s;
                     """,
                    {'user_name': login_user['user_name']})
-    stored_hash = cursor.fetchall()[0]  # we get the salt and the stored hash here in a dictionary
+    stored_hash = cursor.fetchall()[0]  # we get the the stored hash here in a dictionary
     return stored_hash
 
