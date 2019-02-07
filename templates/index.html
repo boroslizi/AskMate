@@ -8,7 +8,8 @@
 {% endblock %}
 {% block body %}
 <h1>Latest Questions</h1>
-<table class="table table-hover table-dark">
+<div class="panel panel-default">
+<table class="table table-hover table-dark table-bordered">
     <thead>
     <tr>
       <th scope="col">Question</th>
@@ -26,4 +27,5 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}
