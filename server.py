@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for, session
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -247,6 +248,26 @@ def display_all_user_activities(user):
     return render_template('user_page.html', question_activities=question_activities, answer_activities=answer_activities, comment_activities=comment_activities)
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "GET":
+        html = render_template('login.html')
+        session['log_status'] = 'initialized'
+        return html
+    elif request.method == "POST":
+        login_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+        stored_hash = data_manager.get_stored_hash(login_user)
+        verification = util.verify_password(login_user['password'], stored_hash['hashed_password'])
+        if verification is True:
+            session['user_name'] = login_user['user_name']
+            session['log_status'] = 'logged'
+            return redirect(url_for('login'))
+        else:
+            session['log_status'] = 'wrong'
+            return render_template('login.html')
 
 
 
