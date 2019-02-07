@@ -33,7 +33,12 @@ def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
     comments = data_manager.get_all_comments()
-    return render_template('display_question.html', question=question, answers=answers, comments=comments)
+    try:
+        current_user_id = data_manager.get_user_id_by_user_name(session['user_name'])
+    except KeyError:
+        current_user_id = "undefined"
+    return render_template('display_question.html', question=question, answers=answers, comments=comments,
+                           user_id=current_user_id)
 
 
 @app.route('/questions/<question_id>/vote-up', methods=['POST'])
@@ -214,9 +219,10 @@ def registration():
             return render_template('registration.html', is_in_the_db=is_in_the_db)
 
 
-@app.route('/question/<question_id>/accept', methods=['POST'])
-def accept_answer(question_id):
-    data_manager.mark_question_as_accepted(question_id)
+@app.route('/question/<question_id>/<answer_id>/accept', methods=['POST'])
+def accept_answer(question_id, answer_id):
+    data_manager.mark_answer_as_accepted(answer_id)
+    current_user_id = data_manager.get_user_id_by_user_name(session['user_name'])
     return redirect(url_for('display_question', question_id=question_id))
 
 
@@ -224,6 +230,23 @@ def accept_answer(question_id):
 def route_users():
     user_data = data_manager.get_all_user_data()
     return render_template('users.html', user_data=user_data)
+
+@app.route('/user/<user>')
+def display_all_user_activities(user):
+
+    try:
+        session['user_name']
+    except KeyError:
+        return redirect(url_for('index'))
+
+    user_id = data_manager.get_user_id_by_user_name(user)
+    question_activities = data_manager.get_all_questions_by_id(user_id)
+    answer_activities = data_manager.get_all_answers_by_id(user_id)
+    comment_activities = data_manager.get_all_comments_by_id(user_id)
+    return render_template('user_page.html', question_activities=question_activities, answer_activities=answer_activities, comment_activities=comment_activities)
+
+
+
 
 
 if __name__ == "__main__":
