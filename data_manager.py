@@ -400,3 +400,15 @@ def get_all_comments_by_id(cursor, user_id):
                    {'user_id': user_id})
     comments = cursor.fetchall()
     return comments
+
+
+@connection.connection_handler
+def get_stored_hash(cursor, login_user):
+    cursor.execute("""
+                    SELECT hashed_password FROM users
+                    WHERE user_name=%(user_name)s;
+                    """,
+                   {'user_name': login_user['user_name']})
+    stored_hash = cursor.fetchall()[0]  # we get the the stored hash here in a dictionary
+    return stored_hash
+
