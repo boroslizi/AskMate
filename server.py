@@ -270,6 +270,12 @@ def login():
             return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    del session['user_name']
+    session['log_status'] = 'initialized'
+    return redirect( url_for('index'))
+
 
 if __name__ == "__main__":
     app.secret_key = '5stars'
