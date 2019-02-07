@@ -246,6 +246,17 @@ def display_all_user_activities(user):
     return render_template('user_page.html', question_activities=question_activities, answer_activities=answer_activities, comment_activities=comment_activities)
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "GET":
+        return render_template('login.html')  #TODO
+    elif request.method == "POST":
+        login_user = {
+            'user_name': request.form.get('user_name'),
+            'password': request.form.get('password')
+        }
+
+        return redirect(url_for('registration'))  #TODO
 
 
 
