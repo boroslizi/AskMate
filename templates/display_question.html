@@ -106,10 +106,12 @@
                 </td>
                 {% endif %}
                 <td>{{ answer['submission_time'] }}</td>
-                <td>{{ 'Yes' if question['accepted'] is sameas True else 'Not yet' }}<br>
-                    <form action="{{ url_for('accept_answer', question_id=question['id']) }}" method="post">
+                <td>{{ 'Yes' if answer['accepted'] is sameas True else 'Not yet' }}<br>
+                {% if (answer['accepted'] is sameas False) and (answer['user_id'] is not sameas user_id) and (user_id is not sameas "undefined") %}
+                    <form action="{{ url_for('accept_answer', question_id=question['id'], answer_id=answer['id']) }}" method="post">
                         <button type="submit" class="btn btn-secondary">Mark as accepted</button>
                     </form></td>
+                {% endif %}
                 <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
                     <button type="submit" class="btn btn-light">Vote up</button>
                     </form>
