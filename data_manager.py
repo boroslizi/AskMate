@@ -319,6 +319,15 @@ def get_user_id_by_user_name(cursor, user_name):
     user_id = cursor.fetchall()[0]['id']
     return user_id
 
+@connection.connection_handler
+def user_name_verifying(cursor, user_name):
+    cursor.execute("""
+                    SELECT user_name FROM users
+                    WHERE user_name = %(user_name)s;
+                    """, {'user_name': user_name})
+    is_in_the_db = cursor.fetchall()
+    return is_in_the_db
+
 
 @connection.connection_handler
 def add_new_user(cursor, new_user):
@@ -342,6 +351,13 @@ def mark_question_as_accepted(cursor, question_id):
                             WHERE id=%(id)s;""",
                    {'id': question_id})
 
+
+@connection.connection_handler
+def get_all_user_data(cursor):
+    cursor.execute("""SELECT id, user_name, reg_date FROM users;
+                    """)
+    user_data = cursor.fetchall()
+    return user_data
 
 @connection.connection_handler
 def get_all_user_data(cursor):
