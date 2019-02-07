@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Add a Comment{% endblock %}
 {% block body %}
-<h1>New Comment</h1>
-<div class="form-group">
+<div class="container_add_new">
+<div class="card border-primary mb-3">
+    <div class="card-header"><h4>New Comment</h4></div>
+  <div class="card-body text-primary">
+
+      <div class="form-group">
     <div class="form-group col-md-4">
         <form action="{{ url_for('add_comment_to_question', question_id=question['id']) }}" method="post">
             <p><label for="comment">Comment:</label><br>
@@ -11,4 +15,13 @@
         </form>
     </div>
 </div>
+
+  </div>
+</div>
+</div>
+
+
+
+
+
 {% endblock %}

@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 {% block title %}Edit Answer{% endblock %}
 {% block body %}
-<h1>Edit Answer</h1>
-    <div class="form-group">
-    <div class="form-group col-md-4">
-        <form action="{{ url_for('edit_answer', answer_id=answer['id']) }}" method="post">
+    <div class="container_add_new">
+            <div class="card border-primary mb-3">
+                <div class="card-header"><h4>Edit Answer</h4></div>
+            <div class="card-body text-primary">
+
+            <div class="form-group">
+            <div class="form-group col-md-4">
+       <form action="{{ url_for('edit_answer', answer_id=answer['id']) }}" method="post">
             <p><label for="message">Your answer:</label><br>
             <textarea id="message" name="message" class="form-control" rows="4" cols="40">{{ answer['message'] }}</textarea></p>
             <p><label for="image">Image URL:</label><br>
             <input id="image" name="image" class="form-control" value="{{ answer['image'] }}"></p>
             <button type="submit" class="btn btn-primary">Submit edited answer</button>
         </form>
+        </div>
+        </div>
+
+        </div>
     </div>
     </div>
 {% endblock %}

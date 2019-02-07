@@ -7,7 +7,9 @@
           crossorigin='anonymous'>
 {% endblock %}
 {% block body %}
+<div class="alert alert-light" role="alert">
 <h1>Questions</h1>
+</div>
 <table class="table table-hover table-dark">
     <thead>
     <tr>
@@ -28,6 +30,6 @@
 </table>
 <p></p>
 <form action="{{ url_for('add_question') }}">
-    <input type="submit" class="btn btn-primary" value="Ask a Question">
+    <input type="submit" class="btn btn-light" value="Ask a Question">
 </form>
 {% endblock %}

@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Edit Question{% endblock %}
 {% block body %}
-<h1>Edit Question</h1>
-    <div class="form-group">
-    <div class="form-group col-md-4">
-        <form action="{{ url_for('edit_question', question_id=question['id']) }}" method="post">
+    <div class="container_add_new">
+            <div class="card border-primary mb-3">
+                <div class="card-header"><h4>Edit question</h4></div>
+            <div class="card-body text-primary">
+
+            <div class="form-group">
+            <div class="form-group col-md-4">
+       <form action="{{ url_for('edit_question', question_id=question['id']) }}" method="post">
             <p><label for="question">Your question:</label><br>
             <input id="question" name="question" class="form-control" value="{{ question['title'] }}"></p>
             <p><label for="message">Message:</label><br>
@@ -13,6 +17,10 @@
             <input id="image" name="image" class="form-control" value="{{ question['image'] }}"></p>
             <button type="submit" class="btn btn-primary">Submit edited question</button>
         </form>
+        </div>
+        </div>
+
+        </div>
     </div>
     </div>
 {% endblock %}

@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Ask a Question{% endblock %}
 {% block body %}
-<h1>New Question</h1>
-<form action="{{ url_for('add_question') }}" method="post">
+<div class="container_add_new">
+            <div class="card border-primary mb-3">
+                <div class="card-header"><h4>New question</h4></div>
+            <div class="card-body text-primary">
+
+            <div class="form-group">
+            <div class="form-group col-md-4">
+       <form action="{{ url_for('add_question') }}" method="post">
   <div class="form-group">
       <div class="form-group col-md-4">
         <label for="question">Your question:</label>
@@ -25,4 +31,10 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
+        </div>
+        </div>
+
+        </div>
+    </div>
+    </div>
 {% endblock %}

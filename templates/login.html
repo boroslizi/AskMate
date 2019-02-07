@@ -12,19 +12,31 @@
     {% endif %}
 
     {% if not session['user_name'] %}
-        <form action="{{ url_for('login') }}" method="post">
-            <p>
-                Username <br>
-                <input type=text maxlength="100" name="user_name">
-            </p>
-            <p>
-                Password <br>
-                <input type=password name="password">
-            </p>
-            <p>
-                <button type="submit">Login</button>
-            </p>
-        </form>
+        <div class="container_add_new">
+            <div class="card border-primary mb-3">
+            <div class="card-header"><h4>Login</h4></div>
+            <div class="card-body text-primary">
+
+            <div class="form-group">
+            <div class="form-group col-md-4">
+       <form action="{{ url_for('login') }}" method="post">
+                    <p>Username <br>
+                        <input type=text maxlength="100" name="user_name" class="form-control">
+                    </p>
+                    <p>
+                        Password <br>
+                        <input type=password name="password" class="form-control">
+                    </p>
+                    <p>
+                        <button class="btn btn-primary" type="submit">Login</button>
+                    </p>
+                </form>
+        </div>
+        </div>
+
+        </div>
+    </div>
+    </div>
     {% endif %}
 
     {% if session['log_status'] == "logged" %}
@@ -37,6 +49,5 @@
     <p>You are already logged in.</p>
     {% endif %}
 
-
-    <a href="{{ url_for('index') }}">Back to the main menu</a>
 {% endblock %}
+
