@@ -16,10 +16,10 @@
         <button type="submit" class="btn btn-light">Add comment</button>
     </form>
     <form action="{{ url_for("question_vote_up", question_id=question['id']) }}" method="post">
-        <button type="submit" class="btn btn-light">Vote up</button>
+        <button type="submit" class="btn btn-light vote">Vote up</button>
     </form>
     <form action="{{ url_for("question_vote_down", question_id=question['id']) }}" method="post">
-        <button type="submit" class="btn btn-light">Vote down</button>
+        <button type="submit" class="btn btn-light vote">Vote down</button>
     </form>
 </div>
 </div>
@@ -112,10 +112,10 @@
                     </form></td>
                 {% endif %}
                 <td><form action="{{ url_for("answer_vote_up", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
-                    <button type="submit" class="btn btn-light">Vote up</button>
+                    <button type="submit" class="btn btn-light vote">Vote up</button>
                     </form>
                     <form action="{{ url_for("answer_vote_down", question_id=answer['question_id'], answer_id=answer['id']) }}" method="post">
-                    <button type="submit" class="btn btn-light">Vote down</button>
+                    <button type="submit" class="btn btn-light vote">Vote down</button>
                     </form>
                 </td>
                 <td>{{ answer['vote_number'] }}</td>
