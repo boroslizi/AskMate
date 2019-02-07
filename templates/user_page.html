@@ -1,0 +1,66 @@
+{%  extends "base.html" %}
+{% block title %}Welcome!{%  endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+          integrity='sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/'
+          crossorigin='anonymous'>
+{% endblock %}
+{% block body %}
+<h1>User page</h1>
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+      <th scope="col">Question</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if question_activities%}
+        {% for question in question_activities %}
+        <tr>
+            <td><a href="{{ url_for('display_question', question_id=question['id']) }}"> {{ question['title'] }}</a></td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <td>No questions found</td>
+    {% endif %}
+
+    </tbody>
+</table>
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+      <th scope="col">Answer</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if question_activities%}
+    {% for answer in answer_activities %}
+    <tr>
+        <td><a href="{{ url_for('display_question', question_id=answer['question_id']) }}"> {{ answer['message'] }}</a></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+        <td>No answers found</td>
+    {% endif %}
+    </tbody>
+</table>
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+      <th scope="col">Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if question_activities%}
+    {% for comment in comment_activities %}
+    <tr>
+        <td><a href="{{ url_for('display_question', question_id=comment['question_id']) }}"> {{ comment['message'] }}</a></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+        <td>No comments found</td>
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

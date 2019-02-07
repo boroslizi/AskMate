@@ -233,11 +233,18 @@ def route_users():
 
 @app.route('/user/<user>')
 def display_all_user_activities(user):
+
+    try:
+        session['user_name']
+    except KeyError:
+        return redirect(url_for('index'))
+
     user_id = data_manager.get_user_id_by_user_name(user)
     question_activities = data_manager.get_all_questions_by_id(user_id)
     answer_activities = data_manager.get_all_answers_by_id(user_id)
     comment_activities = data_manager.get_all_comments_by_id(user_id)
     return render_template('user_page.html', question_activities=question_activities, answer_activities=answer_activities, comment_activities=comment_activities)
+
 
 
 

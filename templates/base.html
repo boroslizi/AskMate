@@ -30,11 +30,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('route_users') }}">All users</a>
             </li>
-{#            {% if (session['user']) %}#}
+            {% if (session['user_name']) %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('display_all_user_activities', user=session['user_name']) }}">Display all user activities</a>
                 </li>
-{#            {% endif %}#}
+            {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}" method='post'>
             <input class="form-control mr-sm-2" type="text" id='search_phrase' placeholder="Search" name="search_phrase"
