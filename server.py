@@ -9,8 +9,7 @@ latest_opened_question_id = 0
 @app.route('/')
 def index():
     latest_questions = data_manager.get_latest_questions(5)
-    user = data_manager.get_user_by_id(1)
-    return render_template('index.html', questions=latest_questions, user=user)
+    return render_template('index.html', questions=latest_questions)
 
 
 @app.route('/list')
@@ -194,15 +193,6 @@ def delete_comment(comment_id):
     global latest_opened_question_id
     return redirect(url_for('display_question', question_id=latest_opened_question_id))
 
-@app.route('/user/<user_id>')
-def display_all_user_activities(user_id):
-    question_activities = question_id
-    answer_activities = data_manager.get_question_by_id(question_id)
-    comment_activities = data_manager.get_all_answers_by_id_ordered_by_vote_number(question_id)
-    return render_template('user_page.html', user=user_id)
-
-
-
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
@@ -234,6 +224,16 @@ def accept_answer(question_id):
 def route_users():
     user_data = data_manager.get_all_user_data()
     return render_template('users.html', user_data=user_data)
+
+@app.route('/user/<user>')
+def display_all_user_activities(user):
+    user_id = data_manager.get_user_id_by_user_name(user)
+    question_activities = data_manager.get_all_questions_by_id(user_id)
+    answer_activities = data_manager.get_all_answers_by_id(user_id)
+    comment_activities = data_manager.get_all_comments_by_id(user_id)
+    return render_template('user_page.html', question_activities=question_activities, answer_activities=answer_activities, comment_activities=comment_activities)
+
+
 
 
 if __name__ == "__main__":
