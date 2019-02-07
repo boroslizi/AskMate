@@ -5,20 +5,32 @@
 {% endblock %}
 
 {% block body %}
-    <form action="{{ url_for('registration') }}" method="post">
-        <p>
-            Username <br>
-            <input type=text maxlength="100" name="user_name">
-        </p>
-        <p>
-            Password <br>
-            <input type=text name="password">
-        </p>
-        <p>
-            <button type="submit">Registration</button>
-        </p>
-    </form>
+    {% if is_in_the_db %}
+        <script>
+            alert("This username already exists in our system, please choose another one.");
+        </script>
+    {% endif %}
 
+    {% if not session['user_name'] %}
+        <form action="{{ url_for('registration') }}" method="post">
+            <p>
+                Username <br>
+                <input type=text maxlength="100" name="user_name">
+            </p>
+            <p>
+                Password <br>
+                <input type=password name="password">
+            </p>
+            <p>
+                <button type="submit">Registration</button>
+            </p>
+        </form>
+    {% endif %}
+    {% if session['reg_status'] == "registered" %}
+        <script>
+            alert("The registration has been successful");
+        </script>
+    {% endif %}
 
 
     <a href="{{ url_for('index') }}">Back to the main menu</a>
