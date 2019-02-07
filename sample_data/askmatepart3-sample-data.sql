@@ -132,3 +132,6 @@ SELECT pg_catalog.setval('comment_id_seq', 2, true);
 
 INSERT INTO "public"."users" ("id", "user_name", "salt", "hashed_password", "reg_date")
 VALUES (0, 'John McClain', 'b''$2b$12$JqB2dSEoJMBxchKv/hwTyu''', 'b''$2b$12$IsTvK4Typtc8bURN7opczODUoLubN5z9mY6rSmne8TKYbqUGp7H0S''', '2019-02-06 09:32:47.657000') 
+
+ALTER TABLE question
+	ADD accepted varchar(3);
